@@ -1,13 +1,12 @@
 package com.example.case_study_mdl_4_shopee.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Setter
 @Getter
@@ -23,7 +22,14 @@ public class Product {
     private int price;
     private int stock;
     private String imageUrl;
-    private Long category_id;
-    private Long seller_id;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+    @ManyToOne
+    @JoinColumn(name = "seller_id")
+    private Account seller;
     private Long review_id;
+
+    @OneToMany(mappedBy = "product")
+    private List<Review> reviews;
 }
