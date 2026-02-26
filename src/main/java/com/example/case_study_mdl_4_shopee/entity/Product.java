@@ -16,19 +16,19 @@ import java.util.List;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long product_id;
+    private Long productId;
     private String name;
     private String description;
     private int price;
     private int stock;
     private String imageUrl;
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "categoryId")
     private Category category;
     @ManyToOne
-    @JoinColumn(name = "seller_id")
+    @JoinColumn(name = "sellerId")
     private Account seller;
-    private Long review_id;
+    private Long reviewId;
 
     @OneToMany(mappedBy = "product")
     private List<Review> reviews;

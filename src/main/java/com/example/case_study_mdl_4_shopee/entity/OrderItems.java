@@ -14,15 +14,15 @@ import lombok.Setter;
 public class OrderItems {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long order_item_id;
+    private Long orderItemsId;
     @ManyToOne
-    @JoinColumn(name = "sub_order_id")
+    @JoinColumn(name = "subOrderId")
     private SubOrders subOrders;
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "productId")
     private Product product;
     private int quantity;
     private int price;
-    private boolean is_chosen = true;
+    private boolean isChosen = true;
 
 }

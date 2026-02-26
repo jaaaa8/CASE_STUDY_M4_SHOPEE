@@ -1,6 +1,6 @@
 package com.example.case_study_mdl_4_shopee.entity;
 
-import com.example.case_study_mdl_4_shopee.entity.enums.SubOrderStatus;
+import com.example.case_study_mdl_4_shopee.enums.SubOrderStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,18 +17,18 @@ import java.util.List;
 public class SubOrders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long sub_order_id;
+    private Long subOrderId;
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "orderId")
     private Orders order;
     @ManyToOne
-    @JoinColumn(name = "seller_id")
+    @JoinColumn(name = "sellerId")
     private Account seller;
     @ManyToOne
-    @JoinColumn(name = "confirmed_by")
+    @JoinColumn(name = "confirmedBy")
     private Account confirmedBy;
     @Enumerated(EnumType.STRING)
-    private SubOrderStatus sub_order_status;
+    private SubOrderStatus subOrderStatus;
     private int total;
 
     @OneToMany(mappedBy = "subOrders")
