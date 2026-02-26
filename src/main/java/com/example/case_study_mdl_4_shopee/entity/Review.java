@@ -16,16 +16,16 @@ import lombok.Setter;
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long review_id;
+    private Long reviewId;
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "productId")
     private Product product;
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customerId")
     private Account customerReview;
     private String comments;
-    private String image_url;
+    private String imageUrl;
     private int rating;
-    private Date created_at;
+    private Date createdAt;
 
 }

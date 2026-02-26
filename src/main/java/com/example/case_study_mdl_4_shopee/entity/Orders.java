@@ -3,7 +3,7 @@ package com.example.case_study_mdl_4_shopee.entity;
 import java.util.Date;
 import java.util.List;
 
-import com.example.case_study_mdl_4_shopee.entity.enums.OrderStatus;
+import com.example.case_study_mdl_4_shopee.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,14 +18,14 @@ import lombok.Setter;
 public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long order_id;
+    private Long ordersId;
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customerId")
     private Account customerOrder;
     @Enumerated(EnumType.STRING)
-    private OrderStatus order_status;
+    private OrderStatus orderStatus;
     private int total;
-    private Date created_at;
+    private Date createdAt;
 
     @OneToMany(mappedBy = "order")
     private List<SubOrders> subOrders;
