@@ -1,10 +1,110 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Hồ sơ của tôi | Shopee</title>
 </head>
 <body>
+    <div th:replace="~{layout/main :: header}"></div>
 
+    <main class="container my-4">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2">
+                <div class="d-flex align-items-center mb-4">
+                    <img src="https://via.placeholder.com/50" class="rounded-circle border" alt="Avatar">
+                    <div class="ms-3">
+                        <div class="fw-bold text-truncate" style="font-size: 0.9rem;">customer_user</div>
+                        <a href="#" class="text-decoration-none text-secondary" style="font-size: 0.8rem;"><i class="fas fa-pencil-alt me-1"></i>Sửa hồ sơ</a>
+                    </div>
+                </div>
+                
+                <ul class="list-unstyled" style="font-size: 0.9rem;">
+                    <li class="mb-3"><a href="#" class="text-decoration-none text-dark fw-bold shopee-color"><i class="far fa-user me-2 text-primary"></i>Tài khoản của tôi</a></li>
+                    <li class="mb-3 ps-4"><a href="#" class="text-decoration-none text-dark shopee-color">Hồ sơ</a></li>
+                    <li class="mb-3 ps-4"><a href="#" class="text-decoration-none text-dark">Ngân hàng</a></li>
+                    <li class="mb-3 ps-4"><a href="#" class="text-decoration-none text-dark">Địa chỉ</a></li>
+                    <li class="mb-3 ps-4"><a href="#" class="text-decoration-none text-dark">Đổi mật khẩu</a></li>
+                    <li class="mb-3"><a href="#" class="text-decoration-none text-dark"><i class="fas fa-clipboard-list me-2 text-primary"></i>Đơn mua</a></li>
+                    <li class="mb-3"><a href="#" class="text-decoration-none text-dark"><i class="far fa-bell me-2 text-danger"></i>Thông báo</a></li>
+                    <li class="mb-3"><a href="#" class="text-decoration-none text-dark"><i class="fas fa-ticket-alt me-2 text-danger"></i>Kho Voucher</a></li>
+                </ul>
+            </div>
+
+            <!-- Content -->
+            <div class="col-md-10">
+                <div class="bg-white p-4 rounded shadow-sm">
+                    <h5 class="border-bottom pb-3 mb-4">Hồ Sơ Của Tôi</h5>
+                    <p class="text-secondary mb-4" style="font-size: 0.9rem;">Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <form>
+                                <div class="row mb-3 align-items-center">
+                                    <div class="col-3 text-end text-secondary" style="font-size: 0.9rem;">Tên đăng nhập</div>
+                                    <div class="col-9">customer_user</div>
+                                </div>
+                                <div class="row mb-3 align-items-center">
+                                    <div class="col-3 text-end text-secondary" style="font-size: 0.9rem;">Tên</div>
+                                    <div class="col-9"><input type="text" class="form-control" value="Nguyễn Văn A"></div>
+                                </div>
+                                <div class="row mb-3 align-items-center">
+                                    <div class="col-3 text-end text-secondary" style="font-size: 0.9rem;">Email</div>
+                                    <div class="col-9">cu*****@gmail.com <a href="#" class="ms-2 text-decoration-none">Thay đổi</a></div>
+                                </div>
+                                <div class="row mb-3 align-items-center">
+                                    <div class="col-3 text-end text-secondary" style="font-size: 0.9rem;">Số điện thoại</div>
+                                    <div class="col-9">*********00 <a href="#" class="ms-2 text-decoration-none">Thay đổi</a></div>
+                                </div>
+                                <div class="row mb-3 align-items-center">
+                                    <div class="col-3 text-end text-secondary" style="font-size: 0.9rem;">Giới tính</div>
+                                    <div class="col-9">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="gender" id="male" checked>
+                                            <label class="form-check-label" for="male">Nam</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="gender" id="female">
+                                            <label class="form-check-label" for="female">Nữ</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="gender" id="other">
+                                            <label class="form-check-label" for="other">Khác</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-4 align-items-center">
+                                    <div class="col-3 text-end text-secondary" style="font-size: 0.9rem;">Ngày sinh</div>
+                                    <div class="col-9">
+                                        <div class="d-flex gap-2">
+                                            <select class="form-select w-25"><option>1</option></select>
+                                            <select class="form-select w-25"><option>Tháng 1</option></select>
+                                            <select class="form-select w-25"><option>1990</option></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3"></div>
+                                    <div class="col-9">
+                                        <button type="button" class="btn btn-danger shopee-bg-color px-4">Lưu</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-4 border-start text-center">
+                            <img src="https://via.placeholder.com/100" class="rounded-circle mb-3 border" alt="Big Avatar">
+                            <div>
+                                <button class="btn btn-outline-secondary btn-sm mb-3">Chọn ảnh</button>
+                                <div class="text-secondary" style="font-size: 0.8rem;">
+                                    Dung lượng file tối đa 1 MB<br>Định dạng: .JPEG, .PNG
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{layout/main :: footer}"></div>
 </body>
 </html>

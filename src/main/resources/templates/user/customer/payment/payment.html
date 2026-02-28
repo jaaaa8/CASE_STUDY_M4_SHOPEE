@@ -1,10 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Thanh toán | Shopee</title>
 </head>
 <body>
+    <div th:replace="~{layout/main :: header}"></div>
 
+    <main class="container my-4">
+        <div class="bg-white p-4 rounded shadow-sm mb-4">
+            <h5 class="shopee-color mb-4"><i class="fas fa-map-marker-alt me-2"></i>Địa Chỉ Nhận Hàng</h5>
+            <div class="d-flex align-items-center">
+                <span class="fw-bold me-3">Nguyễn Văn A (+84) 987 654 321</span>
+                <span class="me-3">Số 123, Đường ABC, Quận Hoàn Kiếm, Hà Nội</span>
+                <span class="badge border text-danger border-danger me-3">Mặc định</span>
+                <a href="#" class="text-decoration-none ms-auto">Thay Đổi</a>
+            </div>
+        </div>
+
+        <div class="bg-white rounded shadow-sm mb-4">
+            <div class="p-3 border-bottom d-flex fw-bold" style="font-size: 0.9rem;">
+                <div style="width: 50%;">Sản phẩm</div>
+                <div class="text-center" style="width: 15%;">Đơn giá</div>
+                <div class="text-center" style="width: 15%;">Số lượng</div>
+                <div class="text-center" style="width: 20%;">Thành tiền</div>
+            </div>
+            
+            <div class="p-3 border-bottom d-flex align-items-center">
+                <div class="d-flex align-items-center" style="width: 50%;">
+                    <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m1m6qf6vj4zv4f" style="width: 50px; height: 50px; object-fit: cover;" class="border">
+                    <span class="ms-3 text-truncate-2" style="font-size: 0.85rem;">Giày Sneaker Nam Nữ Thể Thao Cao Cấp Mẫu Mới 2024</span>
+                </div>
+                <div class="text-center" style="width: 15%;">₫150.000</div>
+                <div class="text-center" style="width: 15%;">1</div>
+                <div class="text-center" style="width: 20%;">₫150.000</div>
+            </div>
+
+            <div class="p-3 bg-light d-flex align-items-center">
+                <div class="text-secondary" style="font-size: 0.85rem;">Lời nhắn:</div>
+                <input type="text" class="form-control form-control-sm ms-3" style="width: 300px;" placeholder="Lưu ý cho người bán...">
+                <div class="ms-auto text-end" style="font-size: 0.85rem;">
+                    Đơn vị vận chuyển: <span class="fw-bold">Nhanh</span><br>
+                    <span class="text-secondary">Nhận hàng vào 28 Th02 - 02 Th03</span>
+                </div>
+                <div class="ms-5 text-end" style="width: 100px;">₫15.000</div>
+            </div>
+
+            <div class="p-3 text-end border-top">
+                Tổng số tiền (1 sản phẩm): <span class="shopee-color fs-5 fw-bold">₫165.000</span>
+            </div>
+        </div>
+
+        <div class="bg-white p-4 rounded shadow-sm">
+            <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+                <h5 class="mb-0">Phương thức thanh toán</h5>
+                <div class="ms-4 d-flex gap-2">
+                    <button class="btn btn-outline-danger btn-sm px-3">Thanh toán khi nhận hàng</button>
+                    <button class="btn btn-outline-secondary btn-sm px-3">Thẻ Tín dụng/Ghi nợ</button>
+                    <button class="btn btn-outline-secondary btn-sm px-3">Ví ShopeePay</button>
+                </div>
+            </div>
+
+            <div class="row justify-content-end text-end" style="font-size: 0.9rem; line-height: 2;">
+                <div class="col-3 text-secondary">Tổng tiền hàng</div>
+                <div class="col-2">₫150.000</div>
+            </div>
+            <div class="row justify-content-end text-end" style="font-size: 0.9rem; line-height: 2;">
+                <div class="col-3 text-secondary">Phí vận chuyển</div>
+                <div class="col-2">₫15.000</div>
+            </div>
+            <div class="row justify-content-end text-end mb-4" style="line-height: 2;">
+                <div class="col-3 text-secondary">Tổng thanh toán</div>
+                <div class="col-2 shopee-color fs-3 fw-bold">₫165.000</div>
+            </div>
+
+            <div class="text-end border-top pt-4">
+                <p class="text-secondary mb-4" style="font-size: 0.8rem;">Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo Điều khoản Shopee</p>
+                <button class="btn btn-danger px-5 py-2 fs-5 shopee-bg-color">Đặt Hàng</button>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{layout/main :: footer}"></div>
 </body>
 </html>
