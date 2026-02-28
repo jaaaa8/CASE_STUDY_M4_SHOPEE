@@ -1,0 +1,35 @@
+<h2>SubOrder Detail</h2>
+
+<div>
+  <p>SubOrder ID: <span th:text="${detail.subOrder.subOrderId}"></span></p>
+  <p>Status: <span th:text="${detail.subOrder.subOrderStatus}"></span></p>
+  <p>Total: <span th:text="${detail.subOrder.total}"></span></p>
+</div>
+
+<h3>Items</h3>
+<table border="1">
+  <tr><th>Product ID</th><th>Price</th><th>Quantity</th></tr>
+  <tr th:each="it : ${detail.items}">
+    <td th:text="${it.productId}"></td>
+    <td th:text="${it.price}"></td>
+    <td th:text="${it.quantity}"></td>
+  </tr>
+</table>
+
+<h3>Update Status</h3>
+<form th:action="@{/user/seller/orders/{id}/status(id=${detail.subOrder.subOrderId})}" method="post">
+  <select name="status">
+    <option th:each="s : ${allStatus}" th:value="${s}" th:text="${s}"></option>
+  </select>
+  <button type="submit">Update</button>
+</form>
+
+<form th:action="@{/user/seller/orders/{id}/confirm(id=${detail.subOrder.subOrderId})}" method="post">
+  <button type="submit">Confirm</button>
+</form>
+
+<form th:action="@{/user/seller/orders/{id}/cancel(id=${detail.subOrder.subOrderId})}" method="post">
+  <button type="submit">Cancel</button>
+</form>
+
+<a th:href="@{/user/seller/orders}">Back</a>

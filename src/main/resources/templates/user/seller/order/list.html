@@ -1,0 +1,20 @@
+<h2>Seller - My Products</h2>
+
+<a th:href="@{/user/seller/products/create}">+ Create Product</a>
+
+<table border="1">
+  <tr>
+    <th>ID</th><th>Name</th><th>Price</th><th>Stock</th><th>Action</th>
+  </tr>
+  <tr th:each="p : ${products}">
+    <td th:text="${p.productId}"></td>
+    <td th:text="${p.name}"></td>
+    <td th:text="${p.price}"></td>
+    <td th:text="${p.stock}"></td>
+    <td>
+      <a th:href="@{/user/seller/products/edit/{id}(id=${p.productId})}">Edit</a>
+    </td>
+  </tr>
+</table>
+
+<a th:href="@{/user/seller/home}">Back Home</a>
