@@ -1,10 +1,88 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Giỏ hàng | Shopee</title>
 </head>
 <body>
+    <div th:replace="~{layout/main :: header}"></div>
 
+    <main class="container my-4">
+        <div class="bg-white p-3 rounded shadow-sm mb-3 d-flex align-items-center" style="font-size: 0.9rem;">
+            <div style="width: 50%;">Sản Phẩm</div>
+            <div class="text-center" style="width: 15%;">Đơn Giá</div>
+            <div class="text-center" style="width: 15%;">Số Lượng</div>
+            <div class="text-center" style="width: 15%;">Số Tiền</div>
+            <div class="text-center" style="width: 5%;">Thao Tác</div>
+        </div>
+
+        <!-- Cart Items -->
+        <div class="bg-white p-3 rounded shadow-sm mb-3">
+            <!-- Item 1 -->
+            <div class="d-flex align-items-center py-3 border-bottom">
+                <div class="d-flex align-items-center" style="width: 50%;">
+                    <input type="checkbox" class="me-3">
+                    <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m1m6qf6vj4zv4f" style="width: 80px; height: 80px; object-fit: cover;" class="border">
+                    <div class="ms-3">
+                        <div class="text-truncate-2" style="font-size: 0.9rem;">Giày Sneaker Nam Nữ Thể Thao Cao Cấp Mẫu Mới 2024</div>
+                        <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/cart/9139274431f08e48816c.png" height="18" class="mt-1">
+                    </div>
+                </div>
+                <div class="text-center" style="width: 15%;">
+                    <span class="text-secondary text-decoration-line-through" style="font-size: 0.8rem;">₫250.000</span>
+                    <div>₫150.000</div>
+                </div>
+                <div class="text-center" style="width: 15%;">
+                    <div class="input-group input-group-sm mx-auto" style="width: 100px;">
+                        <button class="btn btn-outline-secondary">-</button>
+                        <input type="text" class="form-control text-center" value="1">
+                        <button class="btn btn-outline-secondary">+</button>
+                    </div>
+                </div>
+                <div class="text-center shopee-color" style="width: 15%;">₫150.000</div>
+                <div class="text-center" style="width: 5%;">
+                    <button class="btn btn-link btn-sm text-dark text-decoration-none">Xóa</button>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="d-flex align-items-center py-3">
+                <div class="d-flex align-items-center" style="width: 50%;">
+                    <input type="checkbox" class="me-3">
+                    <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lty68y0u4v9f3b" style="width: 80px; height: 80px; object-fit: cover;" class="border">
+                    <div class="ms-3">
+                        <div class="text-truncate-2" style="font-size: 0.9rem;">Áo Khoác Nam Nữ Unisex Form Rộng Vải Nỉ Bông</div>
+                    </div>
+                </div>
+                <div class="text-center" style="width: 15%;">₫99.000</div>
+                <div class="text-center" style="width: 15%;">
+                    <div class="input-group input-group-sm mx-auto" style="width: 100px;">
+                        <button class="btn btn-outline-secondary">-</button>
+                        <input type="text" class="form-control text-center" value="2">
+                        <button class="btn btn-outline-secondary">+</button>
+                    </div>
+                </div>
+                <div class="text-center shopee-color" style="width: 15%;">₫198.000</div>
+                <div class="text-center" style="width: 5%;">
+                    <button class="btn btn-link btn-sm text-dark text-decoration-none">Xóa</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bar -->
+        <div class="sticky-bottom bg-white p-3 rounded shadow-sm d-flex justify-content-between align-items-center mt-4">
+            <div>
+                <input type="checkbox" class="me-2"> Chọn Tất Cả (2)
+                <button class="btn btn-link text-dark text-decoration-none ms-3">Xóa</button>
+            </div>
+            <div class="d-flex align-items-center">
+                <div class="me-4">
+                    Tổng thanh toán (2 sản phẩm): <span class="shopee-color fs-4 fw-bold">₫348.000</span>
+                </div>
+                <a href="/payment" class="btn btn-danger px-5 py-2 shopee-bg-color">Mua Hàng</a>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{layout/main :: footer}"></div>
 </body>
 </html>

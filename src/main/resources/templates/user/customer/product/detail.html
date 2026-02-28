@@ -1,10 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Chi tiết sản phẩm | Shopee</title>
 </head>
 <body>
+    <div th:replace="~{layout/main :: header}"></div>
 
+    <main class="container my-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb" style="font-size: 0.85rem;">
+                <li class="breadcrumb-item"><a href="/" class="text-decoration-none shopee-color">Shopee</a></li>
+                <li class="breadcrumb-item"><a href="#" class="text-decoration-none shopee-color">Thời Trang Nam</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Giày Sneaker Nam</li>
+            </ol>
+        </nav>
+
+        <div class="bg-white p-4 rounded shadow-sm">
+            <div class="row">
+                <!-- Product Images -->
+                <div class="col-md-5">
+                    <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m1m6qf6vj4zv4f" class="img-fluid w-100 mb-3 rounded" alt="Product Large">
+                    <div class="d-flex gap-2 overflow-auto">
+                        <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m1m6qf6vj4zv4f" class="border p-1" style="width: 80px; height: 80px; object-fit: cover; cursor: pointer;">
+                        <img src="https://via.placeholder.com/80" class="border p-1" style="width: 80px; height: 80px; object-fit: cover; cursor: pointer;">
+                        <img src="https://via.placeholder.com/80" class="border p-1" style="width: 80px; height: 80px; object-fit: cover; cursor: pointer;">
+                        <img src="https://via.placeholder.com/80" class="border p-1" style="width: 80px; height: 80px; object-fit: cover; cursor: pointer;">
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="col-md-7">
+                    <h4 class="mb-3">Giày Sneaker Nam Nữ Thể Thao Cao Cấp Mẫu Mới 2024 - Phong Cách Hàn Quốc</h4>
+                    
+                    <div class="d-flex align-items-center gap-3 mb-3" style="font-size: 0.9rem;">
+                        <div class="text-warning">
+                            <span class="text-decoration-underline fw-bold me-1">4.9</span>
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <div class="border-start ps-3">
+                            <span class="fw-bold me-1">2,5k</span><span class="text-secondary">Đánh Giá</span>
+                        </div>
+                        <div class="border-start ps-3">
+                            <span class="fw-bold me-1">8,2k</span><span class="text-secondary">Đã Bán</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-light p-3 mb-4 rounded">
+                        <span class="text-secondary text-decoration-line-through me-2" style="font-size: 1rem;">₫250.000</span>
+                        <span class="shopee-color fw-bold fs-2">₫150.000</span>
+                        <span class="badge shopee-bg-color ms-2">40% GIẢM</span>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="row align-items-center mb-3">
+                            <div class="col-2 text-secondary" style="font-size: 0.9rem;">Vận Chuyển</div>
+                            <div class="col-10">
+                                <div><i class="fas fa-truck-moving me-2 shopee-color"></i>Miễn phí vận chuyển</div>
+                                <div class="text-secondary" style="font-size: 0.8rem;">Vận chuyển tới: Hà Nội</div>
+                            </div>
+                        </div>
+
+                        <div class="row align-items-center mb-3">
+                            <div class="col-2 text-secondary" style="font-size: 0.9rem;">Màu Sắc</div>
+                            <div class="col-10 d-flex gap-2">
+                                <button class="btn btn-outline-secondary btn-sm px-3 border">Trắng</button>
+                                <button class="btn btn-outline-secondary btn-sm px-3 border">Đen</button>
+                                <button class="btn btn-outline-secondary btn-sm px-3 border">Xám</button>
+                            </div>
+                        </div>
+
+                        <div class="row align-items-center mb-3">
+                            <div class="col-2 text-secondary" style="font-size: 0.9rem;">Số Lượng</div>
+                            <div class="col-10 d-flex align-items-center gap-3">
+                                <div class="input-group" style="width: 120px;">
+                                    <button class="btn btn-outline-secondary" type="button">-</button>
+                                    <input type="text" class="form-control text-center" value="1">
+                                    <button class="btn btn-outline-secondary" type="button">+</button>
+                                </div>
+                                <span class="text-secondary" style="font-size: 0.85rem;">999 sản phẩm có sẵn</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3">
+                        <button class="btn btn-outline-danger px-4 py-2" style="background-color: rgba(255,87,34,0.1);">
+                            <i class="fas fa-cart-plus me-2"></i>Thêm Vào Giỏ Hàng
+                        </button>
+                        <button class="btn btn-danger px-5 py-2 shopee-bg-color">Mua Ngay</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-4 mt-4 rounded shadow-sm">
+            <h5 class="mb-4 bg-light p-2">CHI TIẾT SẢN PHẨM</h5>
+            <div class="px-2" style="font-size: 0.9rem; line-height: 1.8;">
+                <div class="row mb-2">
+                    <div class="col-2 text-secondary">Danh Mục</div>
+                    <div class="col-10">Shopee > Thời Trang Nam > Giày Sneaker</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-2 text-secondary">Thương hiệu</div>
+                    <div class="col-10">No Brand</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-2 text-secondary">Gửi từ</div>
+                    <div class="col-10">Quận Hoàn Kiếm, Hà Nội</div>
+                </div>
+                <hr>
+                <h5 class="mb-4 bg-light p-2">MÔ TẢ SẢN PHẨM</h5>
+                <p>Giày Sneaker Nam Nữ Thể Thao Cao Cấp Mẫu Mới 2024 là sự kết hợp hoàn hảo giữa phong cách thời trang và sự thoải mái.</p>
+                <ul>
+                    <li>Chất liệu: Da PU cao cấp bền bỉ, dễ vệ sinh.</li>
+                    <li>Đế giày: Cao su đúc nguyên khối, chống trơn trượt hiệu quả.</li>
+                    <li>Lót giày: Êm ái, thoáng khí, không gây mùi khi mang lâu.</li>
+                    <li>Phong cách: Trẻ trung, năng động, dễ phối đồ.</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{layout/main :: footer}"></div>
 </body>
 </html>

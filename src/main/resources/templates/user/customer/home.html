@@ -1,10 +1,130 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Shopee Việt Nam | Mua và Bán Trực Tuyến</title>
 </head>
 <body>
+    <div th:replace="~{layout/main :: header}"></div>
 
+    <main class="container my-4">
+        <!-- Banner Carousel -->
+        <div id="shopeeBanner" class="carousel slide mb-4" data-bs-ride="carousel">
+            <div class="carousel-inner rounded">
+                <div class="carousel-item active">
+                    <img src="https://img.lazcdn.com/g/p/9202111559c55b5505e638787c800880.jpg_960x960q80.jpg_.webp" class="d-block w-100" alt="Banner 1" style="height: 300px; object-fit: cover;">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://down-vn.img.susercontent.com/file/vn-50009109-8809c9d968512132717596045d947271" class="d-block w-100" alt="Banner 2" style="height: 300px; object-fit: cover;">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#shopeeBanner" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#shopeeBanner" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            </button>
+        </div>
+
+        <!-- Categories Section -->
+        <div class="bg-white p-3 mb-4 rounded shadow-sm">
+            <h6 class="text-secondary mb-3">DANH MỤC</h6>
+            <div class="row row-cols-2 row-cols-md-5 row-cols-lg-10 g-2">
+                <div class="col text-center border p-2 cursor-pointer hover-bg">
+                    <i class="fas fa-tshirt fa-2x mb-2 shopee-color"></i>
+                    <div style="font-size: 0.8rem;">Thời Trang Nam</div>
+                </div>
+                <div class="col text-center border p-2 cursor-pointer hover-bg">
+                    <i class="fas fa-mobile-alt fa-2x mb-2 shopee-color"></i>
+                    <div style="font-size: 0.8rem;">Điện Thoại</div>
+                </div>
+                <div class="col text-center border p-2 cursor-pointer hover-bg">
+                    <i class="fas fa-laptop fa-2x mb-2 shopee-color"></i>
+                    <div style="font-size: 0.8rem;">Máy Tính</div>
+                </div>
+                <div class="col text-center border p-2 cursor-pointer hover-bg">
+                    <i class="fas fa-camera fa-2x mb-2 shopee-color"></i>
+                    <div style="font-size: 0.8rem;">Máy Ảnh</div>
+                </div>
+                <div class="col text-center border p-2 cursor-pointer hover-bg">
+                    <i class="fas fa-headphones fa-2x mb-2 shopee-color"></i>
+                    <div style="font-size: 0.8rem;">Thiết Bị Điện Tử</div>
+                </div>
+                <!-- Thêm nhiều danh mục khác nếu muốn -->
+            </div>
+        </div>
+
+        <!-- Gợi ý hôm nay -->
+        <div class="sticky-top bg-white py-3 border-bottom mb-3" style="top: 0; z-index: 100;">
+            <h5 class="text-center shopee-color fw-bold">GỢI Ý HÔM NAY</h5>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="row g-3">
+            <!-- Mock Product Card 1 -->
+            <div class="col-6 col-md-4 col-lg-2">
+                <a href="/product/detail" class="text-decoration-none text-dark">
+                    <div class="card card-product h-100">
+                        <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m1m6qf6vj4zv4f" class="card-img-top" alt="Product">
+                        <div class="card-body p-2">
+                            <h6 class="card-title text-truncate-2 mb-2" style="font-size: 0.85rem; height: 2.4rem;">Giày Sneaker Nam Nữ Thể Thao Cao Cấp Mẫu Mới 2024</h6>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="shopee-color fs-5">₫150.000</span>
+                                <span class="text-secondary" style="font-size: 0.7rem;">Đã bán 1,2k</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!-- Mock Product Card 2 -->
+            <div class="col-6 col-md-4 col-lg-2">
+                <a href="/product/detail" class="text-decoration-none text-dark">
+                    <div class="card card-product h-100">
+                        <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lty68y0u4v9f3b" class="card-img-top" alt="Product">
+                        <div class="card-body p-2">
+                            <h6 class="card-title text-truncate-2 mb-2" style="font-size: 0.85rem; height: 2.4rem;">Áo Khoác Nam Nữ Unisex Form Rộng Vải Nỉ Bông Dày Dặn</h6>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="shopee-color fs-5">₫99.000</span>
+                                <span class="text-secondary" style="font-size: 0.7rem;">Đã bán 5,6k</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!-- Duplicate for grid effect -->
+             <div class="col-6 col-md-4 col-lg-2" th:each="i : ${#numbers.sequence(1, 10)}">
+                <a href="/product/detail" class="text-decoration-none text-dark">
+                    <div class="card card-product h-100">
+                        <img src="https://via.placeholder.com/200" class="card-img-top" alt="Product">
+                        <div class="card-body p-2">
+                            <h6 class="card-title text-truncate-2 mb-2" style="font-size: 0.85rem; height: 2.4rem;">Sản phẩm mẫu Shopee - Chất lượng cao cấp số [[${i}]]</h6>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="shopee-color fs-5">₫[[${i * 10000}]]</span>
+                                <span class="text-secondary" style="font-size: 0.7rem;">Đã bán [[${i * 100}]]</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <button class="btn btn-outline-secondary px-5 py-2">Xem thêm</button>
+        </div>
+    </main>
+
+    <div th:replace="~{layout/main :: footer}"></div>
+    
+    <style>
+        .text-truncate-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .hover-bg:hover {
+            background-color: #f8f8f8;
+            box-shadow: inset 0 0 1px var(--shopee-orange);
+        }
+    </style>
 </body>
 </html>
