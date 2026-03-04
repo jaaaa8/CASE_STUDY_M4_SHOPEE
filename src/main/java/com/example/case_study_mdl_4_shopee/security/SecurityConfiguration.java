@@ -1,4 +1,4 @@
-package com.example.case_study_mdl_4_shopee.config;
+package com.example.case_study_mdl_4_shopee.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -36,34 +36,36 @@ public class SecurityConfiguration {
         return provider;
     }
 
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//
-//        http
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/login","/register").permitAll()
-//                        .requestMatchers("/admin/**").hasRole("ADMIN")
-//                        .anyRequest().authenticated()
-//                )
-//                .formLogin(form -> form
-//                        .loginPage("/login")
-//                        .defaultSuccessUrl("/")
-//                        .permitAll()
-//                )
-//                .logout(logout -> logout.logoutSuccessUrl("/login"));
-//
-//        return http.build();
-//    }
-
-
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                   JwtFilter jwtFilter) throws Exception {
+
         http
-            .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll()
-            );
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login","/register","/api/auth/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .permitAll()
+                )
+                .logout(logout -> logout.logoutSuccessUrl("/login"))
+                .addFilterBefore(jwtFilter,
+                        org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
+
+
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//            .csrf(AbstractHttpConfigurer::disable)
+//            .authorizeHttpRequests(auth -> auth
+//                .anyRequest().permitAll()
+//            );
+//        return http.build();
+//    }
 }

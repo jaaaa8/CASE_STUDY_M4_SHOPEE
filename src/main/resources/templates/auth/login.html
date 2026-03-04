@@ -51,13 +51,15 @@
             <div class="col-md-5 col-lg-4">
                 <div class="login-container">
                     <h5 class="mb-4">Đăng Nhập</h5>
-                    <form>
+                    <form action="/api/auth/login" method="post">
                         <div class="mb-3">
-                            <input type="text" class="form-control" placeholder="Email/Số điện thoại/Tên đăng nhập">
+                            <input type="text" name="username" class="form-control" placeholder="Email/Số điện thoại/Tên đăng nhập">
                         </div>
+
                         <div class="mb-3">
-                            <input type="password" class="form-control" placeholder="Mật khẩu">
+                            <input type="password" name="password" class="form-control" placeholder="Mật khẩu">
                         </div>
+
                         <button type="submit" class="btn btn-shopee mb-3">Đăng Nhập</button>
                         
                         <div class="d-flex justify-content-between mb-4" style="font-size: 0.8rem;">

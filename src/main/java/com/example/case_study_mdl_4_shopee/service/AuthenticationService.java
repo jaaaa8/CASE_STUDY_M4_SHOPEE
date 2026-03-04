@@ -1,4 +1,162 @@
 package com.example.case_study_mdl_4_shopee.service;
 
-public class AuthenticationService {
+import com.example.case_study_mdl_4_shopee.entity.Account;
+import com.example.case_study_mdl_4_shopee.entity.AccountRole;
+import com.example.case_study_mdl_4_shopee.entity.Role;
+import com.example.case_study_mdl_4_shopee.repository.IAccountRepository;
+import com.example.case_study_mdl_4_shopee.repository.IRoleRepository;
+import com.example.case_study_mdl_4_shopee.service.impl.IAuthenticationService;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import javax.crypto.SecretKey;
+import java.security.Key;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+@Service
+public class AuthenticationService implements IAuthenticationService {
+    @Autowired
+    private IRoleRepository roleRepository;
+    @Autowired
+    private IAccountRepository accountRepository;
+
+    private Set<String> blacklist = new HashSet<>();
+
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
+
+    @Value("${jwt.secret}")
+    private String jwtSecret;
+
+    @Value("${jwt.expiration}")
+    private long jwtExpiration;
+
+    private Key getSigningKey() {
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
+    }
+
+    @Override
+    public boolean register(String username, String password, String email, String phone, String address) {
+        try {
+
+            if (accountRepository.findByUsername(username).isPresent()) {
+                return false;
+            }
+
+            if (accountRepository.findByPhone(phone)) {
+                return false;
+            }
+
+            if (accountRepository.findByEmail(email)) {
+                return false;
+            }
+
+            Role roleUser = roleRepository.findByRoleName("USER");
+
+            Account account = new Account();
+            account.setUsername(username);
+            account.setPassword(password);
+//            account.setPassword(passwordEncoder.encode(password));
+            account.setEmail(email);
+            account.setPhone(phone);
+            account.setAddress(address);
+
+            AccountRole accountRole = new AccountRole();
+            accountRole.setAccount(account);
+            accountRole.setRole(roleUser);
+            accountRole.setRole(roleUser);
+
+            account.getAccountRoles().add(accountRole);
+
+            accountRepository.save(account);
+
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public String login(String username, String password) {
+        try {
+
+            Account account = accountRepository.findByUsername(username).orElse(null);
+
+            if (account == null) {
+                return "";
+            }
+
+            if(!password.equals(account.getPassword())) {
+                return "";
+            }
+
+//            if (!passwordEncoder.matches(password, account.getPassword())) {
+//                return "";
+//            }
+
+            return generateToken(username);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    @Override
+    public boolean logout(String token) {
+        blacklist.add(token);
+        return true;
+    }
+
+    @Override
+    public boolean isAuthenticated(String token) {
+        if (blacklist.contains(token)) {
+            return false;
+        }
+        try {
+            Jwts.parser()
+                    .verifyWith((SecretKey) getSigningKey())
+                    .build()
+                    .parseSignedClaims(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public String refreshToken(String token) {
+        try {
+            if (isAuthenticated(token)) {
+                String username = Jwts.parser()
+                        .verifyWith((SecretKey) getSigningKey())
+                        .build()
+                        .parseSignedClaims(token)
+                        .getPayload()
+                        .getSubject();
+                return generateToken(username);
+            }
+            return "";
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    private String generateToken(String username) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
 }

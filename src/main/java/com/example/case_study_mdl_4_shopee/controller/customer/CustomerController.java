@@ -1,4 +1,4 @@
-package com.example.case_study_mdl_4_shopee.controller;
+package com.example.case_study_mdl_4_shopee.controller.customer;
 
 import com.example.case_study_mdl_4_shopee.entity.*;
 import com.example.case_study_mdl_4_shopee.service.impl.*;
@@ -44,15 +44,6 @@ public class CustomerController {
         return "user/customer/home"; // Hoặc trang chi tiết shop
     }
 
-    @GetMapping("/login")
-    public String login() {
-        return "auth/login";
-    }
-
-    @GetMapping("/register")
-    public String register() {
-        return "auth/register";
-    }
 
     @GetMapping("/product/detail/{id}")
     public String productDetail(@PathVariable Long id, Model model) {

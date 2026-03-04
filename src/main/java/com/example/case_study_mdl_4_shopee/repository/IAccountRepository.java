@@ -1,6 +1,7 @@
 package com.example.case_study_mdl_4_shopee.repository;
 
 import com.example.case_study_mdl_4_shopee.entity.Account;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,7 +10,10 @@ import java.util.Optional;
 
 @Repository
 public interface IAccountRepository extends JpaRepository<Account, Long> {
+    @EntityGraph(attributePaths = {"accountRoles", "accountRoles.role"})
     Optional<Account> findByUsername(String username);
-    boolean existsByEmail(String email);
+    boolean findByEmail(String email);
     List<Account> findByUsernameContainingIgnoreCase(String username);
+    Account findByUsernameAndPassword(String username, String password);
+    boolean findByPhone(String phone);
 }
