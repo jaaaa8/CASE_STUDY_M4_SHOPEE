@@ -16,6 +16,7 @@ import org.hibernate.annotations.CreationTimestamp;
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "reviewId")
     private Long reviewId;
     @ManyToOne
     @JoinColumn(name = "productId")

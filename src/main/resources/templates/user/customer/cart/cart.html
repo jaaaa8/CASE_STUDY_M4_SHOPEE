@@ -16,69 +16,63 @@
         </div>
 
         <!-- Cart Items -->
-        <div class="bg-white p-3 rounded shadow-sm mb-3">
-            <!-- Item 1 -->
-            <div class="d-flex align-items-center py-3 border-bottom">
-                <div class="d-flex align-items-center" style="width: 50%;">
-                    <input type="checkbox" class="me-3">
-                    <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m1m6qf6vj4zv4f" style="width: 80px; height: 80px; object-fit: cover;" class="border">
-                    <div class="ms-3">
-                        <div class="text-truncate-2" style="font-size: 0.9rem;">Giày Sneaker Nam Nữ Thể Thao Cao Cấp Mẫu Mới 2024</div>
-                        <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/cart/9139274431f08e48816c.png" height="18" class="mt-1">
-                    </div>
-                </div>
-                <div class="text-center" style="width: 15%;">
-                    <span class="text-secondary text-decoration-line-through" style="font-size: 0.8rem;">₫250.000</span>
-                    <div>₫150.000</div>
-                </div>
-                <div class="text-center" style="width: 15%;">
-                    <div class="input-group input-group-sm mx-auto" style="width: 100px;">
-                        <button class="btn btn-outline-secondary">-</button>
-                        <input type="text" class="form-control text-center" value="1">
-                        <button class="btn btn-outline-secondary">+</button>
-                    </div>
-                </div>
-                <div class="text-center shopee-color" style="width: 15%;">₫150.000</div>
-                <div class="text-center" style="width: 5%;">
-                    <button class="btn btn-link btn-sm text-dark text-decoration-none">Xóa</button>
-                </div>
+        <div th:each="subOrder : ${cart.subOrders}" class="bg-white p-3 rounded shadow-sm mb-3">
+            <div class="border-bottom pb-2 mb-2 d-flex align-items-center">
+                <i class="fas fa-store me-2 shopee-color"></i>
+                <span class="fw-bold" th:text="${subOrder.sellerOrder.username}">Tên Shop</span>
+                <a th:href="@{'/shop/' + ${subOrder.sellerOrder.accountId}}" class="btn btn-sm btn-outline-secondary ms-3" style="font-size: 0.7rem;">Xem Shop</a>
             </div>
-
-            <!-- Item 2 -->
-            <div class="d-flex align-items-center py-3">
+            
+            <div th:each="item : ${subOrder.orderItems}" class="d-flex align-items-center py-3 border-bottom last-child-border-0">
                 <div class="d-flex align-items-center" style="width: 50%;">
-                    <input type="checkbox" class="me-3">
-                    <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lty68y0u4v9f3b" style="width: 80px; height: 80px; object-fit: cover;" class="border">
+                    <form th:action="@{/cart/toggle-select}" method="post" class="me-3">
+                        <input type="hidden" name="orderItemId" th:value="${item.orderItemsId}">
+                        <input type="checkbox" th:checked="${item.isChosen}" onchange="this.form.submit()">
+                    </form>
+                    <img th:src="${item.product.imageUrl != null ? item.product.imageUrl : 'https://via.placeholder.com/80'}" style="width: 80px; height: 80px; object-fit: cover;" class="border">
                     <div class="ms-3">
-                        <div class="text-truncate-2" style="font-size: 0.9rem;">Áo Khoác Nam Nữ Unisex Form Rộng Vải Nỉ Bông</div>
+                        <div class="text-truncate-2" style="font-size: 0.9rem;" th:text="${item.product.name}">Tên sản phẩm</div>
                     </div>
                 </div>
-                <div class="text-center" style="width: 15%;">₫99.000</div>
                 <div class="text-center" style="width: 15%;">
-                    <div class="input-group input-group-sm mx-auto" style="width: 100px;">
-                        <button class="btn btn-outline-secondary">-</button>
-                        <input type="text" class="form-control text-center" value="2">
-                        <button class="btn btn-outline-secondary">+</button>
-                    </div>
+                    <div th:text="'₫' + ${#numbers.formatInteger(item.price, 0, 'POINT')}">₫0</div>
                 </div>
-                <div class="text-center shopee-color" style="width: 15%;">₫198.000</div>
+                <div class="text-center" style="width: 15%;">
+                    <form th:action="@{/cart/update}" method="post" class="d-flex justify-content-center">
+                        <input type="hidden" name="orderItemId" th:value="${item.orderItemsId}">
+                        <div class="input-group input-group-sm mx-auto" style="width: 100px;">
+                            <button class="btn btn-outline-secondary" type="submit" name="quantity" th:value="${item.quantity - 1}">-</button>
+                            <input type="text" class="form-control text-center" th:value="${item.quantity}" readonly>
+                            <button class="btn btn-outline-secondary" type="submit" name="quantity" th:value="${item.quantity + 1}">+</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="text-center shopee-color" style="width: 15%;" th:text="'₫' + ${#numbers.formatInteger(item.price * item.quantity, 0, 'POINT')}">₫0</div>
                 <div class="text-center" style="width: 5%;">
-                    <button class="btn btn-link btn-sm text-dark text-decoration-none">Xóa</button>
+                    <form th:action="@{/cart/remove}" method="post">
+                        <input type="hidden" name="orderItemId" th:value="${item.orderItemsId}">
+                        <button type="submit" class="btn btn-link btn-sm text-dark text-decoration-none">Xóa</button>
+                    </form>
                 </div>
             </div>
         </div>
 
+        <div th:if="${cart.subOrders == null or cart.subOrders.empty}" class="bg-white p-5 text-center rounded shadow-sm">
+            <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/assets/a60759ad1dabe909c46a817ecbf71878.png" style="width: 100px;">
+            <p class="mt-3 text-secondary">Giỏ hàng của bạn còn trống</p>
+            <a href="/" class="btn btn-danger shopee-bg-color px-4">Mua sắm ngay</a>
+        </div>
+
         <!-- Footer Bar -->
-        <div class="sticky-bottom bg-white p-3 rounded shadow-sm d-flex justify-content-between align-items-center mt-4">
+        <div th:if="${cart.subOrders != null and !cart.subOrders.empty}" class="sticky-bottom bg-white p-3 rounded shadow-sm d-flex justify-content-between align-items-center mt-4 border">
             <div>
-                <input type="checkbox" class="me-2"> Chọn Tất Cả (2)
-                <button class="btn btn-link text-dark text-decoration-none ms-3">Xóa</button>
+                <input type="checkbox" class="me-2" checked> Chọn Tất Cả
             </div>
             <div class="d-flex align-items-center">
                 <div class="me-4">
-                    Tổng thanh toán (2 sản phẩm): <span class="shopee-color fs-4 fw-bold">₫348.000</span>
+                    Tổng thanh toán: <span class="shopee-color fs-4 fw-bold" th:text="'₫' + ${#numbers.formatInteger(cart.total, 0, 'POINT')}">₫0</span>
                 </div>
-                <a href="/payment" class="btn btn-danger px-5 py-2 shopee-bg-color">Mua Hàng</a>
+                <a th:href="@{/payment}" class="btn btn-danger px-5 py-2 shopee-bg-color text-decoration-none">Mua Hàng</a>
             </div>
         </div>
     </main>

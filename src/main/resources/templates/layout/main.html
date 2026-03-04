@@ -81,7 +81,7 @@
                     <span class="cursor-pointer"><i class="far fa-bell me-1"></i>Thông Báo</span>
                     <span class="cursor-pointer"><i class="far fa-question-circle me-1"></i>Hỗ Trợ</span>
                     <span class="cursor-pointer"><i class="fas fa-globe me-1"></i>Tiếng Việt <i class="fas fa-chevron-down"></i></span>
-                    <a href="/register" class="text-white text-decoration-none fw-bold">Đăng Ký</a>
+                    <a href="/profile" class="text-white text-decoration-none fw-bold">Hồ sơ</a>
                     <div style="width: 1px; height: 13px; background-color: hsla(0,0%,100%,.4);"></div>
                     <a href="/login" class="text-white text-decoration-none fw-bold">Đăng Nhập</a>
                 </div>
@@ -95,24 +95,24 @@
                     </a>
                 </div>
                 <div class="col-8">
-                    <div class="search-bar d-flex">
-                        <input type="text" class="search-input ps-3" placeholder="Đăng ký và nhận voucher bạn mới đến 50k!">
-                        <button class="search-btn">
+                    <form th:action="@{/search}" method="get" class="search-bar d-flex">
+                        <input type="text" name="keyword" class="search-input ps-3" placeholder="Đăng ký và nhận voucher bạn mới đến 50k!" th:value="${keyword}">
+                        <button type="submit" class="search-btn">
                             <i class="fas fa-search"></i>
                         </button>
-                    </div>
+                    </form>
                     <div class="mt-2" style="font-size: 0.8rem;">
-                        <span class="me-3">Váy</span>
-                        <span class="me-3">Dép</span>
-                        <span class="me-3">Áo Phông</span>
-                        <span class="me-3">Túi Xách Nữ</span>
-                        <span class="me-3">Váy Cho Bé</span>
+                        <span class="me-3"><a th:href="@{/search(keyword='Váy')}" class="text-white text-decoration-none">Váy</a></span>
+                        <span class="me-3"><a th:href="@{/search(keyword='Dép')}" class="text-white text-decoration-none">Dép</a></span>
+                        <span class="me-3"><a th:href="@{/search(keyword='Áo Phông')}" class="text-white text-decoration-none">Áo Phông</a></span>
+                        <span class="me-3"><a th:href="@{/search(keyword='Túi Xách Nữ')}" class="text-white text-decoration-none">Túi Xách Nữ</a></span>
+                        <span class="me-3"><a th:href="@{/search(keyword='Váy Cho Bé')}" class="text-white text-decoration-none">Váy Cho Bé</a></span>
                     </div>
                 </div>
                 <div class="col-2 text-center">
                     <a href="/cart" class="text-white position-relative">
                         <i class="fas fa-shopping-cart" style="font-size: 1.5rem;"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-white text-danger" style="font-size: 0.6rem;">
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-white text-danger" style="font-size: 0.6rem;" th:text="${cartCount}">
                             0
                         </span>
                     </a>
