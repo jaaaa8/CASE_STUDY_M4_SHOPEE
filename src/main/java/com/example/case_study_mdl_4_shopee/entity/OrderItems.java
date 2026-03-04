@@ -12,6 +12,7 @@ import lombok.*;
 public class OrderItems {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "orderItemsId")
     private Long orderItemsId;
     @ManyToOne
     @JoinColumn(name = "subOrderId")

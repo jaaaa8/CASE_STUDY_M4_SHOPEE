@@ -15,6 +15,7 @@ import java.util.List;
 public class SubOrders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "subOrderId")
     private Long subOrderId;
     @ManyToOne
     @JoinColumn(name = "orderId")

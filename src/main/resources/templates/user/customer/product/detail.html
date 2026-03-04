@@ -10,8 +10,8 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb" style="font-size: 0.85rem;">
                 <li class="breadcrumb-item"><a href="/" class="text-decoration-none shopee-color">Shopee</a></li>
-                <li class="breadcrumb-item"><a href="#" class="text-decoration-none shopee-color">Thời Trang Nam</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Giày Sneaker Nam</li>
+                <li class="breadcrumb-item"><a href="#" class="text-decoration-none shopee-color" th:text="${product.category != null ? product.category.name : 'Danh mục'}">Danh mục</a></li>
+                <li class="breadcrumb-item active" aria-current="page" th:text="${product.name}">Tên sản phẩm</li>
             </ol>
         </nav>
 
@@ -19,103 +19,121 @@
             <div class="row">
                 <!-- Product Images -->
                 <div class="col-md-5">
-                    <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m1m6qf6vj4zv4f" class="img-fluid w-100 mb-3 rounded" alt="Product Large">
+                    <img th:src="${product.imageUrl != null ? product.imageUrl : 'https://via.placeholder.com/400'}" class="img-fluid w-100 mb-3 rounded" alt="Product Large">
                     <div class="d-flex gap-2 overflow-auto">
-                        <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m1m6qf6vj4zv4f" class="border p-1" style="width: 80px; height: 80px; object-fit: cover; cursor: pointer;">
-                        <img src="https://via.placeholder.com/80" class="border p-1" style="width: 80px; height: 80px; object-fit: cover; cursor: pointer;">
-                        <img src="https://via.placeholder.com/80" class="border p-1" style="width: 80px; height: 80px; object-fit: cover; cursor: pointer;">
-                        <img src="https://via.placeholder.com/80" class="border p-1" style="width: 80px; height: 80px; object-fit: cover; cursor: pointer;">
+                        <img th:src="${product.imageUrl != null ? product.imageUrl : 'https://via.placeholder.com/80'}" class="border p-1" style="width: 80px; height: 80px; object-fit: cover; cursor: pointer;">
                     </div>
                 </div>
 
                 <!-- Product Info -->
                 <div class="col-md-7">
-                    <h4 class="mb-3">Giày Sneaker Nam Nữ Thể Thao Cao Cấp Mẫu Mới 2024 - Phong Cách Hàn Quốc</h4>
+                    <h4 class="mb-3" th:text="${product.name}">Tên sản phẩm</h4>
                     
                     <div class="d-flex align-items-center gap-3 mb-3" style="font-size: 0.9rem;">
                         <div class="text-warning">
-                            <span class="text-decoration-underline fw-bold me-1">4.9</span>
+                            <span class="text-decoration-underline fw-bold me-1">5.0</span>
                             <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                         </div>
                         <div class="border-start ps-3">
-                            <span class="fw-bold me-1">2,5k</span><span class="text-secondary">Đánh Giá</span>
+                            <span class="fw-bold me-1" th:text="${product.reviews != null ? product.reviews.size() : 0}">0</span><span class="text-secondary">Đánh Giá</span>
                         </div>
                         <div class="border-start ps-3">
-                            <span class="fw-bold me-1">8,2k</span><span class="text-secondary">Đã Bán</span>
+                            <span class="fw-bold me-1" th:text="${product.sold != null ? product.sold : 0}">0</span><span class="text-secondary">Đã Bán</span>
                         </div>
                     </div>
 
                     <div class="bg-light p-3 mb-4 rounded">
-                        <span class="text-secondary text-decoration-line-through me-2" style="font-size: 1rem;">₫250.000</span>
-                        <span class="shopee-color fw-bold fs-2">₫150.000</span>
-                        <span class="badge shopee-bg-color ms-2">40% GIẢM</span>
+                        <span class="shopee-color fw-bold fs-2" th:text="'₫' + ${#numbers.formatInteger(product.price, 0, 'POINT')}">₫0</span>
                     </div>
 
-                    <div class="mb-4">
-                        <div class="row align-items-center mb-3">
-                            <div class="col-2 text-secondary" style="font-size: 0.9rem;">Vận Chuyển</div>
-                            <div class="col-10">
-                                <div><i class="fas fa-truck-moving me-2 shopee-color"></i>Miễn phí vận chuyển</div>
-                                <div class="text-secondary" style="font-size: 0.8rem;">Vận chuyển tới: Hà Nội</div>
-                            </div>
-                        </div>
-
-                        <div class="row align-items-center mb-3">
-                            <div class="col-2 text-secondary" style="font-size: 0.9rem;">Màu Sắc</div>
-                            <div class="col-10 d-flex gap-2">
-                                <button class="btn btn-outline-secondary btn-sm px-3 border">Trắng</button>
-                                <button class="btn btn-outline-secondary btn-sm px-3 border">Đen</button>
-                                <button class="btn btn-outline-secondary btn-sm px-3 border">Xám</button>
-                            </div>
-                        </div>
-
-                        <div class="row align-items-center mb-3">
-                            <div class="col-2 text-secondary" style="font-size: 0.9rem;">Số Lượng</div>
-                            <div class="col-10 d-flex align-items-center gap-3">
-                                <div class="input-group" style="width: 120px;">
-                                    <button class="btn btn-outline-secondary" type="button">-</button>
-                                    <input type="text" class="form-control text-center" value="1">
-                                    <button class="btn btn-outline-secondary" type="button">+</button>
+                    <form th:action="@{/cart/add}" method="post">
+                        <input type="hidden" name="productId" th:value="${product.productId}">
+                        <div class="mb-4">
+                            <div class="row align-items-center mb-3">
+                                <div class="col-2 text-secondary" style="font-size: 0.9rem;">Số Lượng</div>
+                                <div class="col-10 d-flex align-items-center gap-3">
+                                    <div class="input-group" style="width: 120px;">
+                                        <button class="btn btn-outline-secondary btn-minus" type="button" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">-</button>
+                                        <input type="number" name="quantity" class="form-control text-center" value="1" min="1" th:max="${product.stock}">
+                                        <button class="btn btn-outline-secondary btn-plus" type="button" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">+</button>
+                                    </div>
+                                    <span class="text-secondary" style="font-size: 0.85rem;"><span th:text="${product.stock}">0</span> sản phẩm có sẵn</span>
                                 </div>
-                                <span class="text-secondary" style="font-size: 0.85rem;">999 sản phẩm có sẵn</span>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="d-flex gap-3">
-                        <button class="btn btn-outline-danger px-4 py-2" style="background-color: rgba(255,87,34,0.1);">
-                            <i class="fas fa-cart-plus me-2"></i>Thêm Vào Giỏ Hàng
-                        </button>
-                        <button class="btn btn-danger px-5 py-2 shopee-bg-color">Mua Ngay</button>
-                    </div>
+                        <div class="d-flex gap-3">
+                            <button type="submit" name="action" value="addToCart" class="btn btn-outline-danger px-4 py-2" style="background-color: rgba(255,87,34,0.1);">
+                                <i class="fas fa-cart-plus me-2"></i>Thêm Vào Giỏ Hàng
+                            </button>
+                            <button type="submit" name="action" value="buyNow" class="btn btn-danger px-5 py-2 shopee-bg-color">Mua Ngay</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
 
         <div class="bg-white p-4 mt-4 rounded shadow-sm">
-            <h5 class="mb-4 bg-light p-2">CHI TIẾT SẢN PHẨM</h5>
+            <h5 class="mb-4 bg-light p-2">THÔNG TIN CHI TIẾT</h5>
             <div class="px-2" style="font-size: 0.9rem; line-height: 1.8;">
                 <div class="row mb-2">
                     <div class="col-2 text-secondary">Danh Mục</div>
-                    <div class="col-10">Shopee > Thời Trang Nam > Giày Sneaker</div>
+                    <div class="col-10">Shopee > <span th:text="${product.category != null ? product.category.name : ''}">Category</span></div>
                 </div>
                 <div class="row mb-2">
-                    <div class="col-2 text-secondary">Thương hiệu</div>
-                    <div class="col-10">No Brand</div>
-                </div>
-                <div class="row mb-2">
-                    <div class="col-2 text-secondary">Gửi từ</div>
-                    <div class="col-10">Quận Hoàn Kiếm, Hà Nội</div>
+                    <div class="col-2 text-secondary">Cửa hàng</div>
+                    <div class="col-10"><a th:href="@{'/shop/' + ${product.seller.accountId}}" th:text="${product.seller.username}" class="text-decoration-none shopee-color">Tên shop</a></div>
                 </div>
                 <hr>
                 <h5 class="mb-4 bg-light p-2">MÔ TẢ SẢN PHẨM</h5>
-                <p>Giày Sneaker Nam Nữ Thể Thao Cao Cấp Mẫu Mới 2024 là sự kết hợp hoàn hảo giữa phong cách thời trang và sự thoải mái.</p>
-                <ul>
-                    <li>Chất liệu: Da PU cao cấp bền bỉ, dễ vệ sinh.</li>
-                    <li>Đế giày: Cao su đúc nguyên khối, chống trơn trượt hiệu quả.</li>
-                    <li>Lót giày: Êm ái, thoáng khí, không gây mùi khi mang lâu.</li>
-                    <li>Phong cách: Trẻ trung, năng động, dễ phối đồ.</li>
-                </ul>
+                <p th:text="${product.description}">Mô tả sản phẩm</p>
+            </div>
+        </div>
+
+        <div class="bg-white p-4 mt-4 rounded shadow-sm">
+            <h5 class="mb-4 bg-light p-2">ĐÁNH GIÁ SẢN PHẨM</h5>
+            <div th:each="review : ${product.reviews}" class="border-bottom py-3">
+                <div class="d-flex align-items-center mb-2">
+                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                        <i class="fas fa-user text-secondary"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold" style="font-size: 0.8rem;" th:text="${review.customerReview.username}">Username</div>
+                        <div class="text-warning" style="font-size: 0.7rem;">
+                             <i th:each="i : ${#numbers.sequence(1, 5)}" class="fas fa-star" th:classappend="${i <= review.rating ? 'text-warning' : 'text-secondary'}"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="ps-5">
+                    <div style="font-size: 0.9rem;" th:text="${review.comments}">Nội dung đánh giá</div>
+                    <div class="text-secondary mt-1" style="font-size: 0.75rem;" th:text="${#temporals.format(review.createdAt, 'yyyy-MM-dd HH:mm')}">2024-01-01</div>
+                </div>
+            </div>
+            <div th:if="${product.reviews == null or product.reviews.empty}" class="text-center py-4 text-secondary">
+                Chưa có đánh giá nào cho sản phẩm này
+            </div>
+            
+            <!-- Form đánh giá tạm thời cho demo -->
+            <div class="mt-4 pt-4 border-top">
+                <h6>Gửi đánh giá của bạn</h6>
+                <form th:action="@{/product/review}" method="post">
+                    <input type="hidden" name="productId" th:value="${product.productId}">
+                    <div class="mb-3">
+                        <label class="form-label">Xếp hạng</label>
+                        <select name="rating" class="form-select w-auto">
+                            <option value="5">5 sao</option>
+                            <option value="4">4 sao</option>
+                            <option value="3">3 sao</option>
+                            <option value="2">2 sao</option>
+                            <option value="1">1 sao</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Nhận xét</label>
+                        <textarea name="comments" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-danger shopee-bg-color">Gửi đánh giá</button>
+                </form>
             </div>
         </div>
     </main>
