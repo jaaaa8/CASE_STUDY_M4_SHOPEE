@@ -29,8 +29,8 @@ public class AuthenticationService implements IAuthenticationService {
 
     private Set<String> blacklist = new HashSet<>();
 
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Value("${jwt.secret}")
     private String jwtSecret;
@@ -50,11 +50,11 @@ public class AuthenticationService implements IAuthenticationService {
                 return false;
             }
 
-            if (accountRepository.findByPhone(phone)) {
+            if (accountRepository.existsByPhone(phone)) {
                 return false;
             }
 
-            if (accountRepository.findByEmail(email)) {
+            if (accountRepository.existsByEmail(email)) {
                 return false;
             }
 
@@ -62,15 +62,13 @@ public class AuthenticationService implements IAuthenticationService {
 
             Account account = new Account();
             account.setUsername(username);
-            account.setPassword(password);
-//            account.setPassword(passwordEncoder.encode(password));
+            account.setPassword(passwordEncoder.encode(password));
             account.setEmail(email);
             account.setPhone(phone);
             account.setAddress(address);
 
             AccountRole accountRole = new AccountRole();
             accountRole.setAccount(account);
-            accountRole.setRole(roleUser);
             accountRole.setRole(roleUser);
 
             account.getAccountRoles().add(accountRole);
@@ -95,13 +93,9 @@ public class AuthenticationService implements IAuthenticationService {
                 return "";
             }
 
-            if(!password.equals(account.getPassword())) {
+            if (!passwordEncoder.matches(password, account.getPassword())) {
                 return "";
             }
-
-//            if (!passwordEncoder.matches(password, account.getPassword())) {
-//                return "";
-//            }
 
             return generateToken(username);
 

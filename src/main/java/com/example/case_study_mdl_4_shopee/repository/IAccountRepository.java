@@ -12,8 +12,8 @@ import java.util.Optional;
 public interface IAccountRepository extends JpaRepository<Account, Long> {
     @EntityGraph(attributePaths = {"accountRoles", "accountRoles.role"})
     Optional<Account> findByUsername(String username);
-    boolean findByEmail(String email);
     List<Account> findByUsernameContainingIgnoreCase(String username);
     Account findByUsernameAndPassword(String username, String password);
-    boolean findByPhone(String phone);
+    boolean existsByEmail(String email);
+    boolean existsByPhone(String phone);
 }

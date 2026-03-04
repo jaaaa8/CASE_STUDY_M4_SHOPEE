@@ -1,4 +1,4 @@
-package com.example.case_study_mdl_4_shopee.security;
+package com.example.case_study_mdl_4_shopee.config;
 
 import com.example.case_study_mdl_4_shopee.util.JwtUtil;
 import jakarta.servlet.FilterChain;
@@ -42,25 +42,29 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
 
-        if (token != null && jwtUtil.validateToken(token)) {
+        try {
+            if (token != null && jwtUtil.validateToken(token)) {
 
-            String username = jwtUtil.extractUsername(token);
+                String username = jwtUtil.extractUsername(token);
 
-            UserDetails userDetails =
-                    userDetailsService.loadUserByUsername(username);
+                UserDetails userDetails =
+                        userDetailsService.loadUserByUsername(username);
 
-            UsernamePasswordAuthenticationToken authToken =
-                    new UsernamePasswordAuthenticationToken(
-                            userDetails,
-                            null,
-                            userDetails.getAuthorities()
-                    );
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities()
+                        );
 
-            authToken.setDetails(
-                    new WebAuthenticationDetailsSource().buildDetails(request)
-            );
+                authToken.setDetails(
+                        new WebAuthenticationDetailsSource().buildDetails(request)
+                );
 
-            SecurityContextHolder.getContext().setAuthentication(authToken);
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
+        } catch (Exception e) {
+            SecurityContextHolder.clearContext();
         }
 
         filterChain.doFilter(request, response);

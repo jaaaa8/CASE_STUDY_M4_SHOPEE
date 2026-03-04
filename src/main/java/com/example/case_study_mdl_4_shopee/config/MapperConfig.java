@@ -1,4 +1,4 @@
-package com.example.case_study_mdl_4_shopee.util;
+package com.example.case_study_mdl_4_shopee.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
