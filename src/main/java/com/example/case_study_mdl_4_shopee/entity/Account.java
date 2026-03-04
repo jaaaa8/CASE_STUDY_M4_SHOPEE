@@ -19,6 +19,7 @@ import java.util.Set;
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "accountId")
     private Long accountId;
     private String username;
     private String password;

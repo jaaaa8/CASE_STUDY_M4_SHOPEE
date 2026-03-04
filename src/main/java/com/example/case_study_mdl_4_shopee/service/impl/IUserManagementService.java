@@ -8,15 +8,17 @@ import java.util.List;
 public interface IUserManagementService {
     List<AccountForAdminDto> listAccounts();
     Account findByUsername(String username);
-    Account findById(int id);
-    void deleteUserAccount(int userId);
+    Account findById(Long id);
+    void deleteUserAccount(Long userId);
     void addAdminAccount(Account account);
-    void lockUserAccount(int userId);
+    void lockUserAccount(Long userId);
     // khóa tài khoản người dùng
 
-    void unlockUserAccount(int userId);
+    void unlockUserAccount(Long userId);
     // mở khóa tài khoản người dùng
 
-    void grantCertificatedSeller(int userId);
+    void grantCertificatedSeller(Long userId);
     // cấp quyền người bán uy tín cho tài khoản người dùng
+
+    void deposit(Long userId, Long amount);
 }

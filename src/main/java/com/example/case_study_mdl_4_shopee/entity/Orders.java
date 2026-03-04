@@ -17,6 +17,7 @@ import org.hibernate.annotations.CreationTimestamp;
 public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ordersId")
     private Long ordersId;
     @ManyToOne
     @JoinColumn(name = "customerId")

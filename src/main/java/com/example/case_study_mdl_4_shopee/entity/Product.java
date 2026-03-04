@@ -16,11 +16,15 @@ import java.util.List;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "productId")
     private Long productId;
     private String name;
     private String description;
     private Long price;
     private Long stock;
+    @Builder.Default
+    @Column(nullable = false)
+    private Long sold = 0L;
     private String imageUrl;
     @CreationTimestamp
     @Column(name = "createdAt", updatable = false)

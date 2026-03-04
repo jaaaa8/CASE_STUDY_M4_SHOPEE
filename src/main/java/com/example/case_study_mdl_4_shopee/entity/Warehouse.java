@@ -17,6 +17,7 @@ import java.util.Set;
 public class Warehouse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "warehouseId")
     private Long warehouseId;
     private String name;
     private String address;
