@@ -88,18 +88,4 @@ public class AuthApiController {
 
         return "redirect:/home";
     }
-
-    @PostMapping("/logout")
-    public String logout(HttpServletResponse response) {
-
-        Cookie cookie = new Cookie("jwt", "");
-        cookie.setMaxAge(0);
-        cookie.setPath("/");
-
-        response.addCookie(cookie);
-
-        SecurityContextHolder.clearContext();
-
-        return "redirect:/login";
-    }
 }

@@ -30,6 +30,7 @@ public class CartService implements ICartService {
                     Orders newCart = Orders.builder()
                             .customerOrder(accountRepository.findById(customerId).orElseThrow())
                             .orderStatus(OrderStatus.IN_PROGRESS)
+                            .orderCode("CART_" + customerId + "_" + System.currentTimeMillis())
                             .total(0L)
                             .subOrders(new ArrayList<>())
                             .build();
@@ -54,7 +55,9 @@ public class CartService implements ICartService {
                             .total(0L)
                             .orderItems(new ArrayList<>())
                             .build();
-                    return subOrdersRepository.save(newSubOrder);
+                    SubOrders saved = subOrdersRepository.save(newSubOrder);
+                    cart.getSubOrders().add(saved);
+                    return saved;
                 });
 
         // Tìm xem sản phẩm đã có trong SubOrder chưa
@@ -74,7 +77,8 @@ public class CartService implements ICartService {
                     .price(product.getPrice())
                     .isChosen(true)
                     .build();
-            orderItemsRepository.save(newItem);
+            OrderItems savedItem = orderItemsRepository.save(newItem);
+            subOrder.getOrderItems().add(savedItem);
         }
         
         updateCartTotal(cart);
@@ -97,13 +101,15 @@ public class CartService implements ICartService {
     @Transactional
     public void removeFromCart(Long orderItemId) {
         OrderItems item = orderItemsRepository.findById(orderItemId).orElseThrow();
-        Orders cart = item.getSubOrders().getOrder();
         SubOrders subOrder = item.getSubOrders();
+        Orders cart = subOrder.getOrder();
         
+        subOrder.getOrderItems().remove(item);
         orderItemsRepository.delete(item);
         
         // Nếu SubOrder không còn item nào, xóa SubOrder
-        if (subOrder.getOrderItems().size() <= 1) { // Size <= 1 vì item hiện tại chưa thực sự bị xóa khỏi list trong memory
+        if (subOrder.getOrderItems().isEmpty()) {
+            cart.getSubOrders().remove(subOrder);
             subOrdersRepository.delete(subOrder);
         }
         

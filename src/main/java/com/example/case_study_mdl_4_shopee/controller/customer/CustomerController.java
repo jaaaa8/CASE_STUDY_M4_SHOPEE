@@ -22,8 +22,7 @@ public class CustomerController {
 
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("products", productService.getAllProducts());
-        return "user/customer/home";
+        return "redirect:/customer/home";
     }
 
     @GetMapping("/search")
@@ -54,19 +53,18 @@ public class CustomerController {
 
     @GetMapping("/cart")
     public String cart(Model model) {
-        // Tạm thời fix cứng customerId cho đến khi có SecurityContext
-        Long customerId = 1L; 
-        model.addAttribute("cart", cartService.getCart(customerId));
+        Account currentAccount = userService.getCurrentAccount();
+        model.addAttribute("cart", cartService.getCart(currentAccount.getAccountId()));
         return "user/customer/cart/cart";
     }
 
     @PostMapping("/cart/add")
     public String addToCart(@RequestParam Long productId, @RequestParam int quantity, @RequestParam(required = false) String action) {
-        Long customerId = 1L;
+        Account currentAccount = userService.getCurrentAccount();
         if ("buyNow".equals(action)) {
             return "redirect:/payment?productId=" + productId + "&quantity=" + quantity;
         }
-        cartService.addToCart(customerId, productId, quantity);
+        cartService.addToCart(currentAccount.getAccountId(), productId, quantity);
         return "redirect:/cart";
     }
 
@@ -90,10 +88,11 @@ public class CustomerController {
 
     @GetMapping("/payment")
     public String payment(@RequestParam(required = false) Long productId, @RequestParam(required = false) Integer quantity, Model model) {
-        Long customerId = 1L;
+        Account currentAccount = userService.getCurrentAccount();
+        Long customerId = currentAccount.getAccountId();
         if (productId != null && quantity != null) {
             Product product = productService.getProductById(productId);
-            Account customer = userService.findById(customerId);
+            Account customer = currentAccount;
             
             // Giả lập một đối tượng Orders cho trang payment.html
             OrderItems item = OrderItems.builder()
@@ -104,15 +103,16 @@ public class CustomerController {
             
             SubOrders subOrder = SubOrders.builder()
                     .sellerOrder(product.getSeller())
-                    .orderItems(List.of(item))
                     .total((long) product.getPrice() * quantity)
                     .build();
+            subOrder.setOrderItems(new java.util.ArrayList<>(List.of(item)));
             
             Orders tempOrder = Orders.builder()
                     .customerOrder(customer)
-                    .subOrders(List.of(subOrder))
                     .total((long) (product.getPrice().intValue() * quantity))
                     .build();
+            tempOrder.setSubOrders(new java.util.ArrayList<>(List.of(subOrder)));
+            subOrder.setOrder(tempOrder);
             
             model.addAttribute("cart", tempOrder);
             model.addAttribute("productId", productId);
@@ -128,8 +128,9 @@ public class CustomerController {
                            @RequestParam(required = false) Long productId, 
                            @RequestParam(required = false) Integer quantity,
                            Model model) {
+        Account currentAccount = userService.getCurrentAccount();
         try {
-            Long customerId = 1L;
+            Long customerId = currentAccount.getAccountId();
             Orders order = orderService.checkout(customerId, paymentMethod, productId, quantity);
             return "redirect:/success/success/" + order.getOrdersId();
         } catch (RuntimeException e) {
@@ -138,17 +139,17 @@ public class CustomerController {
         }
     }
 
-    @GetMapping("/payment/success/{orderId}")
+    @GetMapping("/success/success/{orderId}")
     public String checkoutSuccess(@PathVariable Long orderId, Model model) {
-        // Có thể thêm logic để lấy thông tin đơn hàng hiển thị
-        model.addAttribute("orderId", orderId);
+        Orders order = orderService.findById(orderId);
+        model.addAttribute("orderCode", order != null ? order.getOrderCode() : "#" + orderId);
         return "user/customer/success/success";
     }
 
     @PostMapping("/wallet/deposit")
     public String deposit(@RequestParam Long amount) {
-        Long customerId = 1L;
-        userService.deposit(customerId, amount);
+        Account currentAccount = userService.getCurrentAccount();
+        userService.deposit(currentAccount.getAccountId(), amount);
         return "redirect:/profile";
     }
 
@@ -160,15 +161,16 @@ public class CustomerController {
 
     @PostMapping("/product/review")
     public String addReview(@RequestParam Long productId, @RequestParam String comments, @RequestParam int rating) {
-        Long customerId = 1L;
-        reviewService.addReview(customerId, productId, comments, rating, null);
+        Account currentAccount = userService.getCurrentAccount();
+        reviewService.addReview(currentAccount.getAccountId(), productId, comments, rating, null);
         return "redirect:/product/detail/" + productId;
     }
 
     @GetMapping("/profile")
     public String profile(Model model) {
-        Long customerId = 1L;
-        model.addAttribute("orders", orderService.viewOrderHistory(customerId));
+        Account currentAccount = userService.getCurrentAccount();
+        model.addAttribute("orders", orderService.viewOrderHistory(currentAccount.getAccountId()));
+        model.addAttribute("account", currentAccount);
         return "user/profile";
     }
 

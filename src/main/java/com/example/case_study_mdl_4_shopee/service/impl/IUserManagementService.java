@@ -21,4 +21,6 @@ public interface IUserManagementService {
     // cấp quyền người bán uy tín cho tài khoản người dùng
 
     void deposit(Long userId, Long amount);
+
+    Account getCurrentAccount();
 }
