@@ -39,15 +39,6 @@ public class UserManagementService implements IUserManagementService {
         return accountRepository.findById(id).orElse(null);
     }
 
-    @Override
-    public void deleteUserAccount(int userId) {
-        accountRepository.deleteById(userId);
-    }
-
-    @Override
-    public void addAdminAccount(Account account) {
-        accountRepository.save(account);
-    }
 
     @Override
     public void lockUserAccount(int userId) {
@@ -56,6 +47,24 @@ public class UserManagementService implements IUserManagementService {
             account.setActive(false);
             accountRepository.save(account);
         }
+    }
+
+    @Override
+    public List<Account> search(String username, String email, String phone) {
+
+        if (username != null && username.trim().isEmpty()) {
+            username = null;
+        }
+
+        if (email != null && email.trim().isEmpty()) {
+            email = null;
+        }
+
+        if (phone != null && phone.trim().isEmpty()) {
+            phone = null;
+        }
+
+        return accountRepository.searchMulti(username, email, phone);
     }
 
     @Override
@@ -72,6 +81,14 @@ public class UserManagementService implements IUserManagementService {
         Account account = accountRepository.findById(userId).orElse(null);
         if (account != null) {
             account.setCertified(true);
+            accountRepository.save(account);
+        }
+    }
+    @Override
+    public void removeCertificatedSeller(Integer id) {
+        Account account = accountRepository.findById(id).orElse(null);
+        if (account != null) {
+            account.setCertified(false);
             accountRepository.save(account);
         }
     }

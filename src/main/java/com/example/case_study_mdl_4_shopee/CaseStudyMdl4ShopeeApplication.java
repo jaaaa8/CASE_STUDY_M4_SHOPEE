@@ -21,7 +21,7 @@ public class CaseStudyMdl4ShopeeApplication {
         if (Desktop.isDesktopSupported()) {
             Desktop desktop = Desktop.getDesktop();
             try {
-                desktop.browse(new URI(url));
+                desktop.browse(new URI(url));   
             } catch (Exception e) {
                 e.printStackTrace();
             }

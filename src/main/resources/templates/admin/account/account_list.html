@@ -14,6 +14,40 @@
 </head>
 <body>
 <div th:replace="admin/layout/admin_layout :: adminSidebar"></div>
+<form th:action="@{/admin/account/search}" method="get" class="row mb-4">
+
+    <div class="col-md-3">
+        <input type="text" name="username"
+               th:value="${username}"
+               class="form-control"
+               placeholder="Search by username">
+    </div>
+
+    <div class="col-md-3">
+        <input type="text" name="email"
+               th:value="${email}"
+               class="form-control"
+               placeholder="Search by email">
+    </div>
+
+    <div class="col-md-3">
+        <input type="text" name="phone"
+               th:value="${phone}"
+               class="form-control"
+               placeholder="Search by phone">
+    </div>
+
+    <div class="col-md-3">
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-search"></i> Search
+        </button>
+
+        <a th:href="@{/admin/account}" class="btn btn-secondary">
+            Reset
+        </a>
+    </div>
+
+</form>
 <div class="container mt-5">
 
     <h2 class="mb-4 text-center">Account Management</h2>
@@ -41,12 +75,35 @@
 
             <!-- Certified Column -->
             <td class="text-center">
+
+                <!-- Nếu đã certified -->
                 <span th:if="${account.certified}" class="text-success">
-                    <i class="bi bi-patch-check-fill"></i>
-                </span>
+        <i class="bi bi-patch-check-fill"></i>
+    </span>
+
+                <!-- Nếu chưa certified -->
                 <span th:unless="${account.certified}" class="text-secondary">
-                    <i class="bi bi-x-circle"></i>
-                </span>
+        <i class="bi bi-x-circle"></i>
+    </span>
+
+                <br/>
+
+                <!-- Nút Grant -->
+                <a th:if="${!account.certified}"
+                   th:href="@{/admin/account/grantCertificatedSeller/{id}(id=${account.accountId})}"
+                   class="btn btn-primary btn-sm mt-1"
+                   onclick="return confirm('Grant certified seller?')">
+                    Grant
+                </a>
+
+                <!-- Nút Remove -->
+                <a th:if="${account.certified}"
+                   th:href="@{/admin/account/removeCertificatedSeller/{id}(id=${account.accountId})}"
+                   class="btn btn-warning btn-sm mt-1"
+                   onclick="return confirm('Remove certified seller?')">
+                    Remove
+                </a>
+
             </td>
 
             <!-- Action Column -->
@@ -58,30 +115,21 @@
                     <i class="bi bi-eye"></i>
                 </a>
 
-                <!-- Update -->
-                <a th:href="@{/admin/account/update/{id}(id=${account.accountId})}"
-                   class="btn btn-warning btn-sm">
-                    <i class="bi bi-pencil-square"></i>
-                </a>
-
-                <!-- Delete -->
-                <a th:href="@{/admin/account/delete/{id}(id=${account.accountId})}"
-                   class="btn btn-danger btn-sm"
-                   onclick="return confirm('Are you sure you want to delete this account?')">
-                    <i class="bi bi-trash"></i>
-                </a>
-
                 <!-- Lock / Unlock -->
+                <!-- Nếu đang active → cho nút LOCK -->
                 <a th:if="${account.active}"
                    th:href="@{/admin/account/lock/{id}(id=${account.accountId})}"
-                   class="btn btn-secondary btn-sm">
-                    <i class="bi bi-lock"></i>
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('Lock this account?')">
+                    <i class="bi bi-lock-fill"></i>
                 </a>
 
+                <!-- Nếu đang locked → cho nút UNLOCK -->
                 <a th:unless="${account.active}"
                    th:href="@{/admin/account/unlock/{id}(id=${account.accountId})}"
-                   class="btn btn-success btn-sm">
-                    <i class="bi bi-unlock"></i>
+                   class="btn btn-success btn-sm"
+                   onclick="return confirm('Unlock this account?')">
+                    <i class="bi bi-unlock-fill"></i>
                 </a>
 
             </td>
