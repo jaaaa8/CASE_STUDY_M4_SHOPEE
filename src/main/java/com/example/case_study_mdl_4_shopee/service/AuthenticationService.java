@@ -84,28 +84,6 @@ public class AuthenticationService implements IAuthenticationService {
     }
 
     @Override
-    public String login(String username, String password) {
-        try {
-
-            Account account = accountRepository.findByUsername(username).orElse(null);
-
-            if (account == null) {
-                return "";
-            }
-
-            if (!passwordEncoder.matches(password, account.getPassword())) {
-                return "";
-            }
-
-            return generateToken(username);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-
-    @Override
     public boolean logout(String token) {
         blacklist.add(token);
         return true;
@@ -145,7 +123,8 @@ public class AuthenticationService implements IAuthenticationService {
         }
     }
 
-    private String generateToken(String username) {
+    @Override
+    public String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())

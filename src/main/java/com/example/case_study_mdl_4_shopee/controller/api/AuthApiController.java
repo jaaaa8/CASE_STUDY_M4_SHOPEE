@@ -4,6 +4,10 @@ import com.example.case_study_mdl_4_shopee.entity.Account;
 import com.example.case_study_mdl_4_shopee.service.impl.IAuthenticationService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,30 +17,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AuthApiController {
 
     private final IAuthenticationService authenticationService;
+    private final AuthenticationManager authenticationManager;
 
-    public AuthApiController(IAuthenticationService authenticationService) {
+    public AuthApiController(IAuthenticationService authenticationService, AuthenticationManager authenticationManager) {
         this.authenticationService = authenticationService;
+        this.authenticationManager = authenticationManager;
     }
 
     @PostMapping("/login")
     public String login(Account account, HttpServletResponse response) {
 
-        String token = authenticationService.login(
-                account.getUsername(),
-                account.getPassword()
-        );
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            account.getUsername(),
+                            account.getPassword()
+                    )
+            );
 
-        if (token.isEmpty()) {
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            String token = authenticationService.generateToken(authentication.getName());
+
+            Cookie cookie = new Cookie("jwt", token);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+
+            response.addCookie(cookie);
+
+            return "redirect:/home";
+
+        } catch (Exception e) {
             return "redirect:/login?error";
         }
-
-        Cookie cookie = new Cookie("jwt", token);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-
-        response.addCookie(cookie);
-
-        return "redirect:/home";
     }
 
     @PostMapping("/register")
@@ -60,11 +73,13 @@ public class AuthApiController {
     @PostMapping("/logout")
     public String logout(HttpServletResponse response) {
 
-        Cookie cookie = new Cookie("jwt", null);
+        Cookie cookie = new Cookie("jwt", "");
         cookie.setMaxAge(0);
         cookie.setPath("/");
 
         response.addCookie(cookie);
+
+        SecurityContextHolder.clearContext();
 
         return "redirect:/login";
     }
