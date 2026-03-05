@@ -22,4 +22,6 @@ public interface IUserManagementService {
     void addAdminAccount(Account account);
     void removeCertificatedSeller(Long id);
     void deposit(Long userId, Long amount);
+
+    Account getCurrentAccount();
 }

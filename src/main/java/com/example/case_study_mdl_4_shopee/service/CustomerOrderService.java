@@ -40,6 +40,7 @@ public class CustomerOrderService implements ICustomerOrderService {
             order = Orders.builder()
                     .customerOrder(customer)
                     .orderStatus(OrderStatus.COMPLETED)
+                    .orderCode("ORD_" + customerId + "_" + System.currentTimeMillis())
                     .total(product.getPrice() * quantity)
                     .build();
             ordersRepository.save(order);
@@ -50,15 +51,17 @@ public class CustomerOrderService implements ICustomerOrderService {
                     .total((long) product.getPrice() * quantity)
                     .status(SubOrderStatus.PENDING)
                     .build();
-            subOrdersRepository.save(subOrder);
+            SubOrders savedSubOrder = subOrdersRepository.save(subOrder);
+            order.getSubOrders().add(savedSubOrder);
             
             OrderItems item = OrderItems.builder()
-                    .subOrders(subOrder)
+                    .subOrders(savedSubOrder)
                     .product(product)
                     .quantity(quantity)
                     .price(product.getPrice())
                     .build();
-            orderItemsRepository.save(item);
+            OrderItems savedItem = orderItemsRepository.save(item);
+            savedSubOrder.getOrderItems().add(savedItem);
 
             // Trừ kho và tăng số lượng đã bán
             product.setStock(product.getStock() - quantity);
@@ -89,6 +92,7 @@ public class CustomerOrderService implements ICustomerOrderService {
 
             // Cập nhật trạng thái đơn hàng và các đơn hàng con
             order.setOrderStatus(OrderStatus.COMPLETED);
+            order.setOrderCode("ORD_" + customerId + "_" + System.currentTimeMillis());
             ordersRepository.save(order);
 
             for (SubOrders subOrder : order.getSubOrders()) {
@@ -113,7 +117,7 @@ public class CustomerOrderService implements ICustomerOrderService {
                     .accountTransaction(customer)
                     .amount((long) -order.getTotal())
                     .type(TransactionType.PAYMENT)
-                    .description("Thanh toán đơn hàng #" + order.getOrdersId() + " qua ví Shopee")
+                    .description("Thanh toán đơn hàng " + order.getOrderCode() + " qua ví Shopee")
                     .balanceAfter(customer.getBalance())
                     .build());
             
@@ -162,7 +166,7 @@ public class CustomerOrderService implements ICustomerOrderService {
                     .accountTransaction(seller)
                     .amount(-subOrder.getTotal())
                     .type(TransactionType.REFUND)
-                    .description("Hoàn trả tiền do đơn hàng #" + order.getOrdersId() + " bị hủy")
+                    .description("Hoàn trả tiền do đơn hàng " + order.getOrderCode() + " bị hủy")
                     .balanceAfter(seller.getBalance())
                     .build());
         }
@@ -177,7 +181,7 @@ public class CustomerOrderService implements ICustomerOrderService {
                 .accountTransaction(customer)
                 .amount((long) order.getTotal())
                 .type(TransactionType.REFUND)
-                .description("Hoàn tiền đơn hàng #" + order.getOrdersId())
+                .description("Hoàn tiền đơn hàng " + order.getOrderCode())
                 .balanceAfter(customer.getBalance())
                 .build());
     }
@@ -187,5 +191,10 @@ public class CustomerOrderService implements ICustomerOrderService {
         // Cần thêm method trong repository hoặc lọc từ list
         // Tạm thời trả về tất cả đơn hàng của khách hàng
         return accountRepository.findById(customerId).orElseThrow().getOrders();
+    }
+
+    @Override
+    public Orders findById(Long orderId) {
+        return ordersRepository.findById(orderId).orElse(null);
     }
 }

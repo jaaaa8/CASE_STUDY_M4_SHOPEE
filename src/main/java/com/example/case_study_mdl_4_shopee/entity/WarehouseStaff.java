@@ -17,7 +17,7 @@ public class WarehouseStaff {
 
     @OneToOne
     @MapsId
-    @JoinColumn(name = "accountId")
+    @JoinColumn(name = "account_id")
     private Account account;
 
     @ManyToOne

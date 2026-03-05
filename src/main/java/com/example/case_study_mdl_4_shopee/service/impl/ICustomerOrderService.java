@@ -8,4 +8,5 @@ public interface ICustomerOrderService {
     Orders checkout(Long customerId, String paymentMethod, Long productId, Integer quantity);
     void cancelOrder(Long orderId);
     List<Orders> viewOrderHistory(Long customerId);
+    Orders findById(Long orderId);
 }
