@@ -19,12 +19,14 @@ public class AccountRole {
 
     @ManyToOne
     @MapsId("accountId")
-    @JoinColumn(name = "accountId")
+    // Đổi "accountId" thành "account_id" để khớp với Database
+    @JoinColumn(name = "account_id")
     private Account account;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("roleId")
-    @JoinColumn(name = "roleId")
+    // Tương tự, đổi "roleId" thành "role_id"
+    @JoinColumn(name = "role_id")
     private Role role;
 
     @Column(nullable = false)
