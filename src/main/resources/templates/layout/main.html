@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:fragment="head">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         :root {
             --shopee-orange: #ee4d2d;
@@ -63,6 +64,9 @@
         .shopee-bg-color {
             background-color: var(--shopee-orange);
         }
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -81,9 +85,34 @@
                     <span class="cursor-pointer"><i class="far fa-bell me-1"></i>Thông Báo</span>
                     <span class="cursor-pointer"><i class="far fa-question-circle me-1"></i>Hỗ Trợ</span>
                     <span class="cursor-pointer"><i class="fas fa-globe me-1"></i>Tiếng Việt <i class="fas fa-chevron-down"></i></span>
-                    <a href="/profile" class="text-white text-decoration-none fw-bold">Hồ sơ</a>
-                    <div style="width: 1px; height: 13px; background-color: hsla(0,0%,100%,.4);"></div>
-                    <a href="/login" class="text-white text-decoration-none fw-bold">Đăng Nhập</a>
+
+                    <!-- Nếu chưa đăng nhập -->
+                    <div sec:authorize="!isAuthenticated()">
+                        <a href="/login" class="text-white text-decoration-none fw-bold">Đăng Nhập</a>
+                    </div>
+
+                    <!-- Nếu đã đăng nhập -->
+                    <div class="dropdown">
+                        <a class="text-white text-decoration-none fw-bold dropdown-toggle"
+                           href="#"
+                           role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+
+                            <span sec:authentication="name"></span>
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="/profile">Profile</a>
+                            </li>
+                            <li>
+                                <form action="/api/auth/logout" method="post">
+                                    <button class="dropdown-item">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             
@@ -171,6 +200,6 @@
     </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

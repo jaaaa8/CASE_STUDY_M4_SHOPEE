@@ -1,7 +1,6 @@
-package com.example.case_study_mdl_4_shopee.controller;
+package com.example.case_study_mdl_4_shopee.controller.customer;
 
 import com.example.case_study_mdl_4_shopee.entity.Account;
-import com.example.case_study_mdl_4_shopee.entity.OrderItems;
 import com.example.case_study_mdl_4_shopee.entity.Orders;
 import com.example.case_study_mdl_4_shopee.entity.SubOrders;
 import com.example.case_study_mdl_4_shopee.service.impl.ICartService;

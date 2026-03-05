@@ -51,16 +51,32 @@
             <div class="col-md-5 col-lg-4">
                 <div class="register-container">
                     <h5 class="mb-4">Đăng Ký</h5>
-                    <form>
+                    <form th:action="@{/api/auth/register}" method="post">
+
                         <div class="mb-3">
-                            <input type="text" class="form-control" placeholder="Số điện thoại/Email">
+                            <input type="text" name="username" class="form-control" placeholder="Tên đăng nhập">
                         </div>
+
                         <div class="mb-3">
-                            <input type="password" class="form-control" placeholder="Mật khẩu">
+                            <input type="email" name="email" class="form-control" placeholder="Email">
                         </div>
+
                         <div class="mb-3">
-                            <input type="password" class="form-control" placeholder="Xác nhận mật khẩu">
+                            <input type="text" name="phone" class="form-control" placeholder="Số điện thoại">
                         </div>
+
+                        <div class="mb-3">
+                            <input type="text" name="address" class="form-control" placeholder="Địa chỉ">
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="password" name="password" class="form-control" placeholder="Mật khẩu">
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="password" name="confirmPassword" class="form-control" placeholder="Xác nhận mật khẩu">
+                        </div>
+
                         <button type="submit" class="btn btn-shopee mb-3">Đăng Ký</button>
 
                         <div class="d-flex align-items-center mb-4">
@@ -71,27 +87,30 @@
 
                         <div class="row g-2 mb-4">
                             <div class="col-6">
-                                <button type="button" class="btn btn-outline-secondary w-100" style="font-size: 0.85rem;">
+                                <button type="button" class="btn btn-outline-secondary w-100">
                                     <i class="fab fa-facebook me-2 text-primary"></i> Facebook
                                 </button>
                             </div>
+
                             <div class="col-6">
-                                <button type="button" class="btn btn-outline-secondary w-100" style="font-size: 0.85rem;">
+                                <button type="button" class="btn btn-outline-secondary w-100">
                                     <i class="fab fa-google me-2 text-danger"></i> Google
                                 </button>
                             </div>
                         </div>
 
-                        <div class="text-center" style="font-size: 0.8rem; line-height: 1.5;">
+                        <div class="text-center" style="font-size: 0.8rem">
                             <span class="text-secondary">Bằng việc đăng ký, bạn đã đồng ý với Shopee về</span><br>
-                            <a href="#" class="text-decoration-none shopee-color">Điều khoản dịch vụ</a> & 
+                            <a href="#" class="text-decoration-none shopee-color">Điều khoản dịch vụ</a>
+                            &
                             <a href="#" class="text-decoration-none shopee-color">Chính sách bảo mật</a>
                         </div>
 
-                        <div class="text-center mt-4" style="font-size: 0.9rem;">
+                        <div class="text-center mt-4">
                             <span class="text-secondary">Bạn đã có tài khoản?</span>
-                            <a href="/login" class="text-decoration-none" style="color: var(--shopee-orange);">Đăng nhập</a>
+                            <a href="/login" style="color: var(--shopee-orange);">Đăng nhập</a>
                         </div>
+
                     </form>
                 </div>
             </div>
