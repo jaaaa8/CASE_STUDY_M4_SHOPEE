@@ -1,6 +1,6 @@
 package com.example.case_study_mdl_4_shopee.config;
 
-import com.example.case_study_mdl_4_shopee.util.JwtFilter;
+import com.example.case_study_mdl_4_shopee.security.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -55,7 +55,7 @@ public class SecurityConfiguration {
                 .logout(AbstractHttpConfigurer::disable)
 
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
 
                 .authenticationProvider(authenticationProvider())

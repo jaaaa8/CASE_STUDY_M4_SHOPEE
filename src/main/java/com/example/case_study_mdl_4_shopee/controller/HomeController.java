@@ -3,22 +3,37 @@ package com.example.case_study_mdl_4_shopee.controller;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import jakarta.servlet.http.HttpSession;
 
-import java.util.Objects;
 
 @Controller
 public class HomeController {
 
     @GetMapping("/home")
-    public String home(Authentication authentication) {
+    public String home(Authentication authentication, HttpSession session) {
 
-        if (authentication.getAuthorities()
-                .stream()
-                .anyMatch(a -> Objects.equals(a.getAuthority(), "ADMIN"))) {
+        String role = (String) session.getAttribute("selectedRole");
 
-            return "admin/home";
+        if (role == null) {
+            role = authentication.getAuthorities()
+                    .stream()
+                    .map(a -> a.getAuthority())
+                    .findFirst()
+                    .orElse("ROLE_CUSTOMER");
         }
 
-        return "user/customer/home";
+        switch (role) {
+
+            case "ROLE_ADMIN":
+                return "redirect:/admin/home";
+
+            case "ROLE_CUSTOMER":
+                return "redirect:/customer/home";
+
+            case "ROLE_SHIPPER":
+                return "redirect:/shipment/home";
+        }
+
+        return "redirect:/";
     }
 }

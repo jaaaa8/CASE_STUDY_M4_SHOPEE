@@ -7,24 +7,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
-@Getter
 @Entity
-@IdClass(AccountRoleId.class)
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class AccountRole {
-    @Id
+
+    @EmbeddedId
+    private AccountRoleId id;
+
     @ManyToOne
+    @MapsId("accountId")
     @JoinColumn(name = "accountId")
-    @JsonIgnore
     private Account account;
 
-    @Id
     @ManyToOne(fetch = FetchType.EAGER)
+    @MapsId("roleId")
     @JoinColumn(name = "roleId")
     private Role role;
 
     @Column(nullable = false)
-    private boolean isActive = true;
+    private boolean active = true;
 }
