@@ -9,18 +9,25 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(indexes = {
+        @Index(name = "idx_orderitems_suborder", columnList = "subOrderId"),
+        @Index(name = "idx_orderitems_product", columnList = "productId")
+})
 public class OrderItems {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "orderItemsId")
     private Long orderItemsId;
     @ManyToOne
-    @JoinColumn(name = "subOrderId")
+    @JoinColumn(name = "subOrderId", nullable = false)
     private SubOrders subOrders;
     @ManyToOne
-    @JoinColumn(name = "productId")
+    @JoinColumn(name = "productId", nullable = false)
     private Product product;
+    @Column(nullable = false)
     private int quantity;
-    private int price;
+    @Column(nullable = false)
+    private Long price;
     private boolean isChosen = true;
 
 }

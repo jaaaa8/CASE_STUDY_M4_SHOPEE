@@ -21,6 +21,12 @@
                 <ul class="list-unstyled" style="font-size: 0.9rem;">
                     <li class="mb-3"><a href="#" class="text-decoration-none text-dark fw-bold shopee-color"><i class="far fa-user me-2 text-primary"></i>Tài khoản của tôi</a></li>
                     <li class="mb-3 ps-4"><a href="#" class="text-decoration-none text-dark shopee-color">Hồ sơ</a></li>
+                    <li class="mb-3 ps-4">
+                        <a href="#" class="text-decoration-none text-dark d-flex justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#depositModal">
+                            <span><i class="fas fa-wallet me-2 text-danger"></i>Ví Shopee</span>
+                            <span class="badge bg-danger rounded-pill" th:text="'₫' + ${#numbers.formatInteger(userBalance, 0, 'POINT')}">₫0</span>
+                        </a>
+                    </li>
                     <li class="mb-3 ps-4"><a href="#" class="text-decoration-none text-dark">Ngân hàng</a></li>
                     <li class="mb-3 ps-4"><a href="#" class="text-decoration-none text-dark">Địa chỉ</a></li>
                     <li class="mb-3 ps-4"><a href="#" class="text-decoration-none text-dark">Đổi mật khẩu</a></li>
@@ -32,79 +38,80 @@
 
             <!-- Content -->
             <div class="col-md-10">
-                <div class="bg-white p-4 rounded shadow-sm">
-                    <h5 class="border-bottom pb-3 mb-4">Hồ Sơ Của Tôi</h5>
-                    <p class="text-secondary mb-4" style="font-size: 0.9rem;">Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
-
-                    <div class="row">
-                        <div class="col-md-8">
-                            <form>
-                                <div class="row mb-3 align-items-center">
-                                    <div class="col-3 text-end text-secondary" style="font-size: 0.9rem;">Tên đăng nhập</div>
-                                    <div class="col-9">customer_user</div>
-                                </div>
-                                <div class="row mb-3 align-items-center">
-                                    <div class="col-3 text-end text-secondary" style="font-size: 0.9rem;">Tên</div>
-                                    <div class="col-9"><input type="text" class="form-control" value="Nguyễn Văn A"></div>
-                                </div>
-                                <div class="row mb-3 align-items-center">
-                                    <div class="col-3 text-end text-secondary" style="font-size: 0.9rem;">Email</div>
-                                    <div class="col-9">cu*****@gmail.com <a href="#" class="ms-2 text-decoration-none">Thay đổi</a></div>
-                                </div>
-                                <div class="row mb-3 align-items-center">
-                                    <div class="col-3 text-end text-secondary" style="font-size: 0.9rem;">Số điện thoại</div>
-                                    <div class="col-9">*********00 <a href="#" class="ms-2 text-decoration-none">Thay đổi</a></div>
-                                </div>
-                                <div class="row mb-3 align-items-center">
-                                    <div class="col-3 text-end text-secondary" style="font-size: 0.9rem;">Giới tính</div>
-                                    <div class="col-9">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="gender" id="male" checked>
-                                            <label class="form-check-label" for="male">Nam</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="gender" id="female">
-                                            <label class="form-check-label" for="female">Nữ</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="gender" id="other">
-                                            <label class="form-check-label" for="other">Khác</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mb-4 align-items-center">
-                                    <div class="col-3 text-end text-secondary" style="font-size: 0.9rem;">Ngày sinh</div>
-                                    <div class="col-9">
-                                        <div class="d-flex gap-2">
-                                            <select class="form-select w-25"><option>1</option></select>
-                                            <select class="form-select w-25"><option>Tháng 1</option></select>
-                                            <select class="form-select w-25"><option>1990</option></select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-3"></div>
-                                    <div class="col-9">
-                                        <button type="button" class="btn btn-danger shopee-bg-color px-4">Lưu</button>
-                                    </div>
-                                </div>
-                            </form>
+                <div class="bg-white p-4 rounded shadow-sm mb-4">
+                    <h5 class="border-bottom pb-3 mb-4">Lịch Sử Đơn Hàng</h5>
+                    
+                    <div th:each="order : ${orders}" class="mb-4 border rounded p-3">
+                        <div class="d-flex justify-content-between border-bottom pb-2 mb-2">
+                            <span class="fw-bold" th:text="'Mã đơn hàng: #' + ${order.ordersId}">#000</span>
+                            <span class="text-danger fw-bold" th:text="${order.orderStatus}">STATUS</span>
                         </div>
-                        <div class="col-md-4 border-start text-center">
-                            <img src="https://via.placeholder.com/100" class="rounded-circle mb-3 border" alt="Big Avatar">
-                            <div>
-                                <button class="btn btn-outline-secondary btn-sm mb-3">Chọn ảnh</button>
-                                <div class="text-secondary" style="font-size: 0.8rem;">
-                                    Dung lượng file tối đa 1 MB<br>Định dạng: .JPEG, .PNG
+                        
+                        <div th:each="subOrder : ${order.subOrders}" class="mb-3 border-bottom pb-2 last-child-border-0">
+                            <div class="small text-secondary mb-2" th:text="'Shop: ' + ${subOrder.sellerOrder.username}">Shop name</div>
+                            <div th:each="item : ${subOrder.orderItems}" class="d-flex align-items-center mb-2">
+                                <img th:src="${item.product.imageUrl != null ? item.product.imageUrl : 'https://via.placeholder.com/50'}" style="width: 50px; height: 50px; object-fit: cover;" class="border">
+                                <div class="ms-3 flex-grow-1">
+                                    <div class="text-truncate-2" style="font-size: 0.9rem;" th:text="${item.product.name}">Tên sản phẩm</div>
+                                    <div class="text-secondary small" th:text="'x' + ${item.quantity}">x1</div>
                                 </div>
+                                <div class="text-end shopee-color" th:text="'₫' + ${#numbers.formatInteger(item.price * item.quantity, 0, 'POINT')}">₫0</div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center pt-2">
+                            <div th:if="${order.orderStatus.name() != 'CANCELLED' and order.orderStatus.name() != 'COMPLETED'}">
+                                <form th:action="@{/order/cancel}" method="post">
+                                    <input type="hidden" name="orderId" th:value="${order.ordersId}">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">Hủy đơn hàng</button>
+                                </form>
+                            </div>
+                            <div class="ms-auto">
+                                <span>Thành tiền: </span>
+                                <span class="shopee-color fs-4 fw-bold" th:text="'₫' + ${#numbers.formatInteger(order.total, 0, 'POINT')}">₫0</span>
                             </div>
                         </div>
                     </div>
+                    
+                    <div th:if="${orders == null or orders.empty}" class="text-center py-5">
+                        <p class="text-secondary">Bạn chưa có đơn hàng nào</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded shadow-sm">
+                    <h5 class="border-bottom pb-3 mb-4">Hồ Sơ Của Tôi</h5>
+                    <p class="text-secondary mb-4" style="font-size: 0.9rem;">Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
+                    <!-- Form profile cũ... -->
                 </div>
             </div>
         </div>
     </main>
 
     <div th:replace="~{layout/main :: footer}"></div>
+
+    <!-- Deposit Modal -->
+    <div class="modal fade" id="depositModal" tabindex="-1" aria-labelledby="depositModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="depositModalLabel">Nạp tiền vào ví Shopee</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form th:action="@{/wallet/deposit}" method="post">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="amount" class="form-label">Số tiền muốn nạp (₫)</label>
+                            <input type="number" class="form-control" id="amount" name="amount" min="10000" step="10000" value="100000" required>
+                        </div>
+                        <p class="small text-secondary">* Số tiền nạp tối thiểu là 10.000₫</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-danger shopee-bg-color">Nạp tiền</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

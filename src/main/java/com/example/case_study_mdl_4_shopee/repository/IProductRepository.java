@@ -1,6 +1,5 @@
 package com.example.case_study_mdl_4_shopee.repository;
 
-import com.example.case_study_mdl_4_shopee.dto.ProductForAdminDto;
 import com.example.case_study_mdl_4_shopee.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
