@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container mt-5">
+
+  <h3 class="text-center mb-4">Chọn vai trò để tiếp tục</h3>
+
+  <div th:each="role : ${roles}" class="mb-3">
+
+    <form th:action="@{/api/auth/select-role}" method="post">
+
+      <input type="hidden" name="role" th:value="${role.authority}">
+
+      <button class="btn btn-primary w-100"
+              th:text="${#strings.replace(role.authority,'ROLE_','')}">
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+</body>
+</html>

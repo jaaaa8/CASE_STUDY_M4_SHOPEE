@@ -1,5 +1,6 @@
-package com.example.case_study_mdl_4_shopee.util;
+package com.example.case_study_mdl_4_shopee.security;
 
+import com.example.case_study_mdl_4_shopee.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;

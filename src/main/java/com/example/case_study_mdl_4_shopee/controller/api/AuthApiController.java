@@ -4,6 +4,7 @@ import com.example.case_study_mdl_4_shopee.entity.Account;
 import com.example.case_study_mdl_4_shopee.service.impl.IAuthenticationService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -11,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/api/auth")
@@ -25,7 +27,7 @@ public class AuthApiController {
     }
 
     @PostMapping("/login")
-    public String login(Account account, HttpServletResponse response) {
+    public String login(Account account, HttpServletResponse response, HttpSession session) {
 
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -45,6 +47,14 @@ public class AuthApiController {
 
             response.addCookie(cookie);
 
+            var roles = authentication.getAuthorities();
+
+            if (roles.size() > 1) {
+                session.setAttribute("roles", roles);
+                return "redirect:/choose-role";
+            }
+
+            // chỉ 1 role
             return "redirect:/home";
 
         } catch (Exception e) {
@@ -68,6 +78,15 @@ public class AuthApiController {
         }
 
         return "redirect:/login";
+    }
+
+    @PostMapping("/select-role")
+    public String selectRole(@RequestParam String role, HttpSession session) {
+
+        session.removeAttribute("roles");
+        session.setAttribute("selectedRole", role);
+
+        return "redirect:/home";
     }
 
     @PostMapping("/logout")

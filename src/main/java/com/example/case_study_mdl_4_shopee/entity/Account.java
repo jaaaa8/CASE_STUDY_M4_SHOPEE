@@ -33,7 +33,7 @@ public class Account {
     private LocalDateTime createdAt;
 
     @Builder.Default
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<AccountRole> accountRoles = new HashSet<>();
 
     @OneToMany(mappedBy = "seller")
@@ -67,9 +67,17 @@ public class Account {
                 .anyMatch(ar -> ar.getRole().getRoleName().equals(role.getRoleName()));
 
         if (!exists) {
+
             AccountRole accountRole = new AccountRole();
+
             accountRole.setAccount(this);
             accountRole.setRole(role);
+
+            accountRole.setId(new AccountRoleId(
+                    this.accountId,
+                    role.getRoleId()
+            ));
+
             accountRole.setActive(true);
 
             accountRoles.add(accountRole);
