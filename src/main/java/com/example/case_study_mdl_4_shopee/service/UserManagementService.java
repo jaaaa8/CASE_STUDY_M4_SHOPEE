@@ -2,9 +2,11 @@ package com.example.case_study_mdl_4_shopee.service;
 
 import com.example.case_study_mdl_4_shopee.dto.AccountForAdminDto;
 import com.example.case_study_mdl_4_shopee.entity.Account;
+import com.example.case_study_mdl_4_shopee.entity.AccountRole;
 import com.example.case_study_mdl_4_shopee.entity.TransactionHistory;
 import com.example.case_study_mdl_4_shopee.enums.TransactionType;
 import com.example.case_study_mdl_4_shopee.repository.IAccountRepository;
+import com.example.case_study_mdl_4_shopee.repository.IAccountRoleRepository;
 import com.example.case_study_mdl_4_shopee.repository.ITransactionHistoryRepository;
 import com.example.case_study_mdl_4_shopee.service.impl.IUserManagementService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserManagementService implements IUserManagementService {
     private final IAccountRepository accountRepository;
+    private final IAccountRoleRepository accountRoleRepository;
     private final ITransactionHistoryRepository transactionRepository;
 
     @Autowired
@@ -56,21 +59,48 @@ public class UserManagementService implements IUserManagementService {
     }
 
     @Override
+    public void removeCertificatedSeller(Long id) {
+
+    }
+
+    @Override
     public void lockUserAccount(Long userId) {
-//        Account account = accountRepository.findById(userId).orElse(null);
-//        if (account != null) {
-//            account.setActive(false);
-//            accountRepository.save(account);
-//        }
+
+        AccountRole accountRole = accountRoleRepository
+                .findAllByAccount_AccountId(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        accountRole.setActive(false);
+
+        accountRoleRepository.save(accountRole);
+    }
+
+    @Override
+    public List<Account> search(String username, String email, String phone) {
+        if (username != null && username.trim().isEmpty()) {
+            username = null;
+        }
+
+        if (email != null && email.trim().isEmpty()) {
+            email = null;
+        }
+
+        if (phone != null && phone.trim().isEmpty()) {
+            phone = null;
+        }
+
+        return accountRepository.searchMulti(username, email, phone);
     }
 
     @Override
     public void unlockUserAccount(Long userId) {
-//        Account account = accountRepository.findById(userId).orElse(null);
-//        if (account != null) {
-//            account.setActive(true);
-//            accountRepository.save(account);
-//        }
+        AccountRole accountRole = accountRoleRepository
+                .findAllByAccount_AccountId(userId)
+                .orElse(null);
+        if (accountRole != null) {
+            accountRole.setActive(true);
+            accountRoleRepository.save(accountRole);
+        }
     }
 
     @Override
