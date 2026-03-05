@@ -52,7 +52,6 @@ public class SecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-                .logout(AbstractHttpConfigurer::disable)
 
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
@@ -71,6 +70,15 @@ public class SecurityConfiguration {
                         .requestMatchers("/cart/**", "/checkout/**").authenticated()
 
                         .anyRequest().permitAll()
+                )
+
+                .logout(logout -> logout
+                        .logoutUrl("/logout")              // URL logout
+                        .logoutSuccessUrl("/login")       // sau logout redirect
+                        .deleteCookies("jwt")             // xóa cookie JWT
+                        .clearAuthentication(true)
+                        .invalidateHttpSession(true)
+                        .permitAll()
                 )
 
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
