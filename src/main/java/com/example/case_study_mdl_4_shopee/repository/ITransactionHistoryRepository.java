@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ITransactionHistoryRepository extends JpaRepository<TransactionHistory, Integer> {
+public interface ITransactionHistoryRepository extends JpaRepository<TransactionHistory, Long> {
     List<TransactionHistory> findAllByAccountTransaction_AccountIdOrderByCreatedAtDesc(Long accountId);
 }

@@ -27,13 +27,13 @@ public class Account {
     private String phone;
     private String address;
     private Long balance = 0L;
-    private boolean isActive = true;
     private boolean certified = false;
     @CreationTimestamp
     @Column(name = "createdAt", updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    @Builder.Default
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AccountRole> accountRoles = new HashSet<>();
 
     @OneToMany(mappedBy = "seller")
@@ -60,4 +60,19 @@ public class Account {
 
     @OneToMany(mappedBy = "accountTransaction")
     private Set<TransactionHistory> transactions = new HashSet<>();
+
+    public void addRole(Role role) {
+
+        boolean exists = accountRoles.stream()
+                .anyMatch(ar -> ar.getRole().getRoleName().equals(role.getRoleName()));
+
+        if (!exists) {
+            AccountRole accountRole = new AccountRole();
+            accountRole.setAccount(this);
+            accountRole.setRole(role);
+            accountRole.setActive(true);
+
+            accountRoles.add(accountRole);
+        }
+    }
 }

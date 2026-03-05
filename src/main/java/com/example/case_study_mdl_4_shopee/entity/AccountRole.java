@@ -1,5 +1,6 @@
 package com.example.case_study_mdl_4_shopee.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,11 +17,14 @@ public class AccountRole {
     @Id
     @ManyToOne
     @JoinColumn(name = "accountId")
+    @JsonIgnore
     private Account account;
 
     @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "roleId")
     private Role role;
 
+    @Column(nullable = false)
+    private boolean isActive = true;
 }

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.example.case_study_mdl_4_shopee.enums.OrderStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -21,10 +22,12 @@ public class Orders {
     private Long ordersId;
     @ManyToOne
     @JoinColumn(name = "customerId")
+    @JsonIgnore
     private Account customerOrder;
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
-    private int total;
+    @Column(nullable = false)
+    private Long total = 0L;
     @CreationTimestamp
     @Column(name = "createdAt", updatable = false)
     private LocalDateTime createdAt;
