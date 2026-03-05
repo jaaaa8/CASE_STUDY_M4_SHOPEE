@@ -52,6 +52,12 @@ public class SecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
+                .logout(logout -> logout
+                        .logoutUrl("/api/auth/logout")
+                        .logoutSuccessUrl("/login")
+                        .deleteCookies("jwt")
+                        .invalidateHttpSession(true)
+                )
 
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
@@ -62,13 +68,9 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
 
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-
                         .requestMatchers("/seller/**").hasRole("SELLER")
-
                         .requestMatchers("/shipment/**").hasRole("SHIPPER")
-
-                        .requestMatchers("/cart/**", "/checkout/**").authenticated()
-
+                        .requestMatchers("/cart/**", "/checkout/**", "/profile/**", "/wallet/**", "/product/review/**", "/payment/**").authenticated()
                         .anyRequest().permitAll()
                 )
 

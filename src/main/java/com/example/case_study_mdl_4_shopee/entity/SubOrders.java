@@ -54,6 +54,7 @@ public class SubOrders {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "subOrders")
-    private List<OrderItems> orderItems;
+    @OneToMany(mappedBy = "subOrders", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<OrderItems> orderItems = new java.util.ArrayList<>();
 }

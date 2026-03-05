@@ -20,6 +20,8 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ordersId")
     private Long ordersId;
+    @Column(unique = true)
+    private String orderCode;
     @ManyToOne
     @JoinColumn(name = "customerId")
     @JsonIgnore
@@ -32,6 +34,8 @@ public class Orders {
     @Column(name = "createdAt", updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "order")
-    private List<SubOrders> subOrders;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<SubOrders> subOrders = new java.util.ArrayList<>();
 }

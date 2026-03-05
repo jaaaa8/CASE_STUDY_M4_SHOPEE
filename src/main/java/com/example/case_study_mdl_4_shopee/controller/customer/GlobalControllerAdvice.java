@@ -18,16 +18,17 @@ public class GlobalControllerAdvice {
 
     @ModelAttribute("userBalance")
     public Long getUserBalance() {
-        Long customerId = 1L;
-        Account user = userService.findById(customerId);
-        return (user != null) ? user.getBalance() : 0L;
+        Account currentAccount = userService.getCurrentAccount();
+        return (currentAccount != null) ? currentAccount.getBalance() : 0L;
     }
 
     @ModelAttribute("cartCount")
     public int getCartCount() {
-        // Tạm thời fix cứng customerId cho đến khi có SecurityContext
-        Long customerId = 1L;
-        Orders cart = cartService.getCart(customerId);
+        Account currentAccount = userService.getCurrentAccount();
+        if (currentAccount == null) {
+            return 0;
+        }
+        Orders cart = cartService.getCart(currentAccount.getAccountId());
         if (cart == null || cart.getSubOrders() == null) {
             return 0;
         }
