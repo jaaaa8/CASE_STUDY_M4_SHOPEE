@@ -40,7 +40,7 @@ public class CustomerOrderService implements ICustomerOrderService {
             order = Orders.builder()
                     .customerOrder(customer)
                     .orderStatus(OrderStatus.COMPLETED)
-                    .total(product.getPrice().intValue() * quantity)
+                    .total(product.getPrice() * quantity)
                     .build();
             ordersRepository.save(order);
             
@@ -56,7 +56,7 @@ public class CustomerOrderService implements ICustomerOrderService {
                     .subOrders(subOrder)
                     .product(product)
                     .quantity(quantity)
-                    .price(product.getPrice().intValue())
+                    .price(product.getPrice())
                     .build();
             orderItemsRepository.save(item);
 

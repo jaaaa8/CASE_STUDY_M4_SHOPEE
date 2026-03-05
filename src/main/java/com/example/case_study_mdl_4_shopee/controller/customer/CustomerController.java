@@ -99,7 +99,7 @@ public class CustomerController {
             OrderItems item = OrderItems.builder()
                     .product(product)
                     .quantity(quantity)
-                    .price(product.getPrice().intValue())
+                    .price((long) product.getPrice().intValue())
                     .build();
             
             SubOrders subOrder = SubOrders.builder()
@@ -111,7 +111,7 @@ public class CustomerController {
             Orders tempOrder = Orders.builder()
                     .customerOrder(customer)
                     .subOrders(List.of(subOrder))
-                    .total(product.getPrice().intValue() * quantity)
+                    .total((long) (product.getPrice().intValue() * quantity))
                     .build();
             
             model.addAttribute("cart", tempOrder);

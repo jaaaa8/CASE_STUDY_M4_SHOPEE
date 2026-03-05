@@ -54,20 +54,20 @@ public class UserManagementService implements IUserManagementService {
 
     @Override
     public void lockUserAccount(Long userId) {
-        Account account = accountRepository.findById(userId).orElse(null);
-        if (account != null) {
-            account.setActive(false);
-            accountRepository.save(account);
-        }
+//        Account account = accountRepository.findById(userId).orElse(null);
+//        if (account != null) {
+//            account.setActive(false);
+//            accountRepository.save(account);
+//        }
     }
 
     @Override
     public void unlockUserAccount(Long userId) {
-        Account account = accountRepository.findById(userId).orElse(null);
-        if (account != null) {
-            account.setActive(true);
-            accountRepository.save(account);
-        }
+//        Account account = accountRepository.findById(userId).orElse(null);
+//        if (account != null) {
+//            account.setActive(true);
+//            accountRepository.save(account);
+//        }
     }
 
     @Override

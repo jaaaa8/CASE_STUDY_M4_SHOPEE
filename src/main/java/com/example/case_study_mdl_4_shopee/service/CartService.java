@@ -30,7 +30,7 @@ public class CartService implements ICartService {
                     Orders newCart = Orders.builder()
                             .customerOrder(accountRepository.findById(customerId).orElseThrow())
                             .orderStatus(OrderStatus.IN_PROGRESS)
-                            .total(0)
+                            .total(0L)
                             .subOrders(new ArrayList<>())
                             .build();
                     return ordersRepository.save(newCart);
@@ -71,7 +71,7 @@ public class CartService implements ICartService {
                     .subOrders(subOrder)
                     .product(product)
                     .quantity(quantity)
-                    .price(product.getPrice().intValue())
+                    .price(product.getPrice())
                     .isChosen(true)
                     .build();
             orderItemsRepository.save(newItem);
@@ -137,7 +137,7 @@ public class CartService implements ICartService {
                 total += (int) subTotal;
             }
         }
-        currentCart.setTotal(total);
+        currentCart.setTotal((long) total);
         ordersRepository.save(currentCart);
     }
 }
