@@ -27,8 +27,6 @@ public class AuthenticationService implements IAuthenticationService {
     @Autowired
     private IAccountRepository accountRepository;
 
-    private Set<String> blacklist = new HashSet<>();
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -58,7 +56,7 @@ public class AuthenticationService implements IAuthenticationService {
                 return false;
             }
 
-            Role roleUser = roleRepository.findByRoleName("USER");
+            Role roleUser = roleRepository.findByRoleName("ROLE_CUSTOMER");
 
             Account account = new Account();
             account.setUsername(username);
@@ -83,41 +81,19 @@ public class AuthenticationService implements IAuthenticationService {
         }
     }
 
-    @Override
-    public boolean logout(String token) {
-        blacklist.add(token);
-        return true;
-    }
-
-    @Override
-    public boolean isAuthenticated(String token) {
-        if (blacklist.contains(token)) {
-            return false;
-        }
-        try {
-            Jwts.parser()
-                    .verifyWith((SecretKey) getSigningKey())
-                    .build()
-                    .parseSignedClaims(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
 
     @Override
     public String refreshToken(String token) {
         try {
-            if (isAuthenticated(token)) {
-                String username = Jwts.parser()
-                        .verifyWith((SecretKey) getSigningKey())
-                        .build()
-                        .parseSignedClaims(token)
-                        .getPayload()
-                        .getSubject();
-                return generateToken(username);
-            }
-            return "";
+            String username = Jwts.parser()
+                    .verifyWith((SecretKey) getSigningKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .getSubject();
+
+            return generateToken(username);
+
         } catch (Exception e) {
             return "";
         }

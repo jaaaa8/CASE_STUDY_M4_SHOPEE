@@ -88,4 +88,5 @@ public class AuthApiController {
 
         return "redirect:/home";
     }
+
 }

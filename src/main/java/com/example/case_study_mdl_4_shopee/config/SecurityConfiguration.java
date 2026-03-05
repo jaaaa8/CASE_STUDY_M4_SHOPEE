@@ -53,10 +53,12 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(logout -> logout
-                        .logoutUrl("/api/auth/logout")
-                        .logoutSuccessUrl("/login")
-                        .deleteCookies("jwt")
+                        .logoutUrl("/logout")              // URL logout
+                        .logoutSuccessUrl("/login")       // sau logout redirect
+                        .deleteCookies("jwt")             // xóa cookie JWT
+                        .clearAuthentication(true)
                         .invalidateHttpSession(true)
+                        .permitAll()
                 )
 
                 .sessionManagement(session ->
