@@ -53,10 +53,12 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(logout -> logout
-                        .logoutUrl("/api/auth/logout")
-                        .logoutSuccessUrl("/login")
-                        .deleteCookies("jwt")
+                        .logoutUrl("/logout")              // URL logout
+                        .logoutSuccessUrl("/login")       // sau logout redirect
+                        .deleteCookies("jwt")             // xóa cookie JWT
+                        .clearAuthentication(true)
                         .invalidateHttpSession(true)
+                        .permitAll()
                 )
 
                 .sessionManagement(session ->
@@ -72,15 +74,6 @@ public class SecurityConfiguration {
                         .requestMatchers("/shipment/**").hasRole("SHIPPER")
                         .requestMatchers("/cart/**", "/checkout/**", "/profile/**", "/wallet/**", "/product/review/**", "/payment/**").authenticated()
                         .anyRequest().permitAll()
-                )
-
-                .logout(logout -> logout
-                        .logoutUrl("/logout")              // URL logout
-                        .logoutSuccessUrl("/login")       // sau logout redirect
-                        .deleteCookies("jwt")             // xóa cookie JWT
-                        .clearAuthentication(true)
-                        .invalidateHttpSession(true)
-                        .permitAll()
                 )
 
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

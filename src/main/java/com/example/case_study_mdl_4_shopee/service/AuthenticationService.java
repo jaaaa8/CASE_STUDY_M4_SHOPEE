@@ -56,7 +56,7 @@ public class AuthenticationService implements IAuthenticationService {
                 return false;
             }
 
-            Role roleUser = roleRepository.findByRoleName("USER");
+            Role roleUser = roleRepository.findByRoleName("ROLE_CUSTOMER");
 
             Account account = new Account();
             account.setUsername(username);

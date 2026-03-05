@@ -33,7 +33,7 @@ public class Account {
     private LocalDateTime createdAt;
 
     @Builder.Default
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<AccountRole> accountRoles = new HashSet<>();
 
     @OneToMany(mappedBy = "seller")
@@ -72,11 +72,6 @@ public class Account {
 
             accountRole.setAccount(this);
             accountRole.setRole(role);
-
-            accountRole.setId(new AccountRoleId(
-                    this.accountId,
-                    role.getRoleId()
-            ));
 
             accountRole.setActive(true);
 
