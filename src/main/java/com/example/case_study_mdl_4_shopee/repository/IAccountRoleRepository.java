@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,6 @@ public interface IAccountRoleRepository extends JpaRepository<AccountRole,Long> 
     List<AccountRole> findAllByAccount_AccountId(Long accountId);
     @Modifying
     @Transactional
-    @Query("UPDATE AccountRole ar SET ar.active = :status WHERE ar.account.accountId = :accountId")
-    void updateStatusByAccountId(Long accountId, boolean status);
+    @Query("UPDATE AccountRole ar SET ar.active = :status WHERE ar.account.accountId = :accId")
+    void updateStatusByAccountId(@Param("accId") Long accId, @Param("status") boolean status);
 }

@@ -16,7 +16,7 @@
   <div class="card shadow-lg border-0 rounded-4">
     <div class="card-header bg-dark text-white rounded-top-4">
       <h4 class="mb-0">
-        <i class="bi bi-box-seam"></i> Product Detail
+        <i class="bi bi-box-seam"></i> Chi tiết sản phẩm
       </h4>
     </div>
 
@@ -30,17 +30,17 @@
       </div>
 
       <div class="row mb-3">
-        <div class="col-md-3 fw-bold">Name:</div>
+        <div class="col-md-3 fw-bold">Tên sản phẩm:</div>
         <div class="col-md-9" th:text="${product.name}"></div>
       </div>
 
       <div class="row mb-3">
-        <div class="col-md-3 fw-bold">Description:</div>
+        <div class="col-md-3 fw-bold">Mô tả: </div>
         <div class="col-md-9" th:text="${product.description}"></div>
       </div>
 
       <div class="row mb-3">
-        <div class="col-md-3 fw-bold">Price:</div>
+        <div class="col-md-3 fw-bold">Đơn giá:</div>
         <div class="col-md-9">
                     <span class="badge bg-primary"
                           th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' VND'">
@@ -49,7 +49,7 @@
       </div>
 
       <div class="row mb-3">
-        <div class="col-md-3 fw-bold">Stock:</div>
+        <div class="col-md-3 fw-bold">Tồn kho:</div>
         <div class="col-md-9">
                     <span class="badge bg-success"
                           th:text="${product.stock}">
@@ -58,28 +58,28 @@
       </div>
 
       <div class="row mb-3">
-        <div class="col-md-3 fw-bold">Category:</div>
+        <div class="col-md-3 fw-bold">Danh mục:</div>
         <div class="col-md-9"
             th:text="${product.categoryName}">
         </div>
       </div>
 
       <div class="row mb-3">
-        <div class="col-md-3 fw-bold">Seller:</div>
+        <div class="col-md-3 fw-bold">Tên người bán:</div>
         <div class="col-md-9"
              th:text="${product.sellerName}">
         </div>
       </div>
 
       <div class="row mb-3">
-        <div class="col-md-3 fw-bold">Reviews:</div>
+        <div class="col-md-3 fw-bold">Đánh giá:</div>
         <div class="col-md-9"
              th:text="${product.reviews != null ? product.reviews.size() : 0}">
         </div>
       </div>
 
       <div class="row mb-3">
-        <div class="col-md-3 fw-bold">Created At:</div>
+        <div class="col-md-3 fw-bold">Ngày tạo:</div>
         <div class="col-md-9"
              th:text="${#temporals.format(product.createdAt, 'dd/MM/yyyy HH:mm')}">
         </div>
@@ -90,7 +90,7 @@
     <div class="card-footer text-end">
       <a th:href="@{/admin/product}"
          class="btn btn-secondary">
-        <i class="bi bi-arrow-left"></i> Back
+        <i class="bi bi-arrow-left"></i> Trở về
       </a>
     </div>
 
