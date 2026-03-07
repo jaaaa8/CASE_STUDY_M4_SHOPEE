@@ -1,10 +1,149 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/layout :: admin-head('Quản lý Đơn Hàng')}"></head>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
 <body>
 
+<div th:replace="~{admin/fragments/layout :: admin-sidebar}"></div>
+
+<div class="main-content">
+<form method="get"
+      th:action="@{/admin/order}"
+      class="row g-3 mb-4">
+
+    <div class="col-md-3">
+        <input type="text"
+               name="orderCode"
+               class="form-control"
+               placeholder="Order Code">
+    </div>
+
+    <div class="col-md-3">
+        <input type="text"
+               name="customer"
+               class="form-control"
+               placeholder="Customer">
+    </div>
+
+    <div class="col-md-3">
+        <select name="status" class="form-select">
+
+            <option value="">All Status</option>
+
+            <option th:each="s : ${statuses}"
+                    th:value="${s}"
+                    th:text="${s}">
+            </option>
+
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <button class="btn btn-primary w-100">
+            Search
+        </button>
+    </div>
+
+</form>
+<div class="container mt-4">
+
+    <h3>Order Management</h3>
+
+    <table class="table table-bordered">
+
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Order Code</th>
+            <th>Customer</th>
+            <th>Status</th>
+            <th>Total</th>
+            <th>Created</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="order : ${orders}">
+
+            <td th:text="${order.ordersId}"></td>
+
+            <td th:text="${order.orderCode}"></td>
+
+            <td th:text="${order.customerName}"></td>
+
+            <td><form th:action="@{/admin/order/update-status/{id}(id=${order.ordersId})}"
+                      method="post">
+
+                <select name="status"
+                        class="form-select form-select-sm"
+                        onchange="this.form.submit()">
+
+                    <option th:each="s : ${statuses}"
+                            th:value="${s}"
+                            th:selected="${s == order.orderStatus}"
+                            th:text="${s}">
+                    </option>
+
+                </select>
+
+            </form></td>
+
+            <td th:text="${order.total}"></td>
+
+            <td th:text="${#temporals.format(order.createdAt,'dd/MM/yyyy')}"></td>
+
+            <td>
+                <a th:href="@{/admin/order/detail/{id}(id=${order.ordersId})}"
+                   class="btn btn-sm btn-primary">
+                    Detail
+                </a>
+            </td>
+
+        </tr>
+        </tbody>
+
+    </table>
+
+</div>
+<nav>
+    <ul class="pagination justify-content-center">
+
+        <li class="page-item"
+            th:classappend="${orders.first} ? 'disabled'">
+
+            <a class="page-link"
+               th:href="@{/admin/order(page=${orders.number - 1})}">
+                Previous
+            </a>
+        </li>
+
+        <li class="page-item"
+            th:each="i : ${#numbers.sequence(0, orders.totalPages-1)}"
+            th:classappend="${i == orders.number} ? 'active'">
+
+            <a class="page-link"
+               th:href="@{/admin/order(page=${i})}"
+               th:text="${i+1}">
+            </a>
+
+        </li>
+
+        <li class="page-item"
+            th:classappend="${orders.last} ? 'disabled'">
+
+            <a class="page-link"
+               th:href="@{/admin/order(page=${orders.number + 1})}">
+                Next
+            </a>
+
+        </li>
+
+    </ul>
+</nav>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.example.case_study_mdl_4_shopee.repository;
 
+import com.example.case_study_mdl_4_shopee.dto.AccountForAdminDto;
 import com.example.case_study_mdl_4_shopee.entity.Account;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,11 +20,11 @@ public interface IAccountRepository extends JpaRepository<Account, Long> {
     boolean existsByEmail(String email);
     boolean existsByPhone(String phone);
     @Query(value = """
-        SELECT * FROM account
-        WHERE (:username IS NULL OR username LIKE %:username%)
-        AND (:email IS NULL OR email LIKE %:email%)
-        AND (:phone IS NULL OR phone LIKE %:phone%)
-        """, nativeQuery = true)
+    SELECT * FROM account
+    WHERE (:username IS NULL OR username LIKE CONCAT('%', :username, '%'))
+    AND (:email IS NULL OR email LIKE CONCAT('%', :email, '%'))
+    AND (:phone IS NULL OR phone LIKE CONCAT('%', :phone, '%'))
+    """, nativeQuery = true)
     List<Account> searchMulti(
             @Param("username") String username,
             @Param("email") String email,
