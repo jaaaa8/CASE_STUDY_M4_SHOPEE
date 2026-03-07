@@ -31,11 +31,14 @@ public class UserManagementService implements IUserManagementService {
     private ModelMapper modelMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public List<AccountForAdminDto> listAccounts() {
-        return accountRepository.findAll()
-                .stream()
-                .map(account -> modelMapper.map(account, AccountForAdminDto.class))
-                .toList();
+        List<Account> accounts = accountRepository.findAll();
+        return accounts.stream().map(acc -> {
+            // Ép Hibernate load roles ngay tại đây để tránh lỗi Lazy
+            acc.getAccountRoles().size();
+            return new AccountForAdminDto(acc);
+        }).toList();
     }
 
     @Override
@@ -66,22 +69,13 @@ public class UserManagementService implements IUserManagementService {
     @Override
     @Transactional
     public void lockUserAccount(Long userId) {
-        // Tìm tất cả các role của user này
-        List<AccountRole> roles = accountRoleRepository.findAllByAccount_AccountId(userId);
-        if (!roles.isEmpty()) {
-            roles.forEach(role -> role.setActive(false));
-            accountRoleRepository.saveAll(roles);
-        }
+        accountRoleRepository.updateStatusByAccountId(userId, false);
     }
 
     @Override
     @Transactional
     public void unlockUserAccount(Long userId) {
-        List<AccountRole> roles = accountRoleRepository.findAllByAccount_AccountId(userId);
-        if (!roles.isEmpty()) {
-            roles.forEach(role -> role.setActive(true));
-            accountRoleRepository.saveAll(roles);
-        }
+        accountRoleRepository.updateStatusByAccountId(userId, true);
     }
 
     public List<AccountForAdminDto> search(String username, String email, String phone) {

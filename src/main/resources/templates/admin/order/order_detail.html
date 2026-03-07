@@ -11,29 +11,29 @@
 <div class="main-content">
 <div class="container mt-4">
 
-  <h3>Order Detail</h3>
+  <h3>Chi tiết đơn hàng</h3>
 
   <div class="card p-3">
 
-    <p><b>Order Code:</b> <span th:text="${order.orderCode}"></span></p>
+    <p><b>Mã đặt hàng:</b> <span th:text="${order.orderCode}"></span></p>
 
-    <p><b>Customer:</b> <span th:text="${order.customerName}"></span></p>
+    <p><b>Khách hàng:</b> <span th:text="${order.customerName}"></span></p>
 
-    <p><b>Status:</b> <span th:text="${order.orderStatus}"></span></p>
+    <p><b>Trạng thái:</b> <span th:text="${order.orderStatus}"></span></p>
 
-    <p><b>Total:</b> <span th:text="${order.total}"></span></p>
+    <p><b>Tổng:</b> <span th:text="${order.total}"></span></p>
 
   </div>
 
-  <h4 class="mt-4">Products</h4>
+  <h4 class="mt-4">Sản phẩm</h4>
 
   <table class="table table-bordered">
 
     <thead>
     <tr>
-      <th>Product</th>
-      <th>Quantity</th>
-      <th>Price</th>
+      <th>Sản phẩm</th>
+      <th>Số lượng</th>
+      <th>Giá</th>
     </tr>
     </thead>
 

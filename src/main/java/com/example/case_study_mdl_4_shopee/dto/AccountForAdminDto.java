@@ -20,13 +20,16 @@ public class AccountForAdminDto {
     private boolean active;
     private boolean certified;
 
-    public AccountForAdminDto(Account account){
+    public AccountForAdminDto(Account account) {
         this.accountId = account.getAccountId();
         this.username = account.getUsername();
         this.email = account.getEmail();
         this.phone = account.getPhone();
-        this.active = account.getAccountRoles().stream()
-                .anyMatch(AccountRole::isActive);
-    }
+        if (account.getAccountRoles() == null || account.getAccountRoles().isEmpty()) {
+            this.active = true;
+        } else {
+            this.active = account.getAccountRoles().stream()
+                    .anyMatch(ar -> ar.isActive());
+        }
 
-}
+    }}

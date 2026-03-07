@@ -17,20 +17,20 @@
         <input type="text"
                name="orderCode"
                class="form-control"
-               placeholder="Order Code">
+               placeholder="mã đặt hàng">
     </div>
 
     <div class="col-md-3">
         <input type="text"
                name="customer"
                class="form-control"
-               placeholder="Customer">
+               placeholder="khách hàng">
     </div>
 
     <div class="col-md-3">
         <select name="status" class="form-select">
 
-            <option value="">All Status</option>
+            <option value="">Tất cả trạng thái</option>
 
             <option th:each="s : ${statuses}"
                     th:value="${s}"
@@ -42,33 +42,30 @@
 
     <div class="col-md-3">
         <button class="btn btn-primary w-100">
-            Search
+            Tìm kiếm
         </button>
     </div>
 
 </form>
 <div class="container mt-4">
 
-    <h3>Order Management</h3>
+    <h3>Quản lí đơn hàng</h3>
 
     <table class="table table-bordered">
 
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Order Code</th>
-            <th>Customer</th>
-            <th>Status</th>
-            <th>Total</th>
-            <th>Created</th>
-            <th>Action</th>
+            <th>Mã đặt hàng</th>
+            <th>Khách hàng</th>
+            <th>Trạng thái</th>
+            <th>Tổng</th>
+            <th>Ngày đặt đơn</th>
+            <th>Thao tác</th>
         </tr>
         </thead>
 
         <tbody>
         <tr th:each="order : ${orders}">
-
-            <td th:text="${order.ordersId}"></td>
 
             <td th:text="${order.orderCode}"></td>
 
@@ -98,7 +95,7 @@
             <td>
                 <a th:href="@{/admin/order/detail/{id}(id=${order.ordersId})}"
                    class="btn btn-sm btn-primary">
-                    Detail
+                    Chi tiết
                 </a>
             </td>
 
