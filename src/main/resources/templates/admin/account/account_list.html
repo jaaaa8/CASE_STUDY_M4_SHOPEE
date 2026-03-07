@@ -1,145 +1,150 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="">
-<head>
-    <meta charset="UTF-8">
-    <title>Account Management</title>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/layout :: admin-head('Quản lý Tài khoản')}"></head>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-          rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-          rel="stylesheet">
-</head>
+<style>
+    /* Hiệu ứng cho dòng bị khóa */
+    .row-locked {
+        background-color: #f8f9fa !important;
+        color: #6c757d;
+    }
+    .row-locked img {
+        filter: grayscale(100%);
+    }
+    .table-hover tbody tr.row-locked:hover {
+        background-color: #e9ecef !important;
+    }
+</style>
 
 <body>
 
-<div class="container mt-5">
+<div th:replace="~{admin/fragments/layout :: admin-sidebar}"></div>
 
-    <!-- Search Form -->
-    <form th:action="@{/admin/account/search}" method="get" class="row mb-4">
+<div class="main-content">
+    <div class="container-fluid mt-4">
 
-        <div class="col-md-3">
-            <input type="text"
-                   name="username"
-                   th:value="${username}"
-                   class="form-control"
-                   placeholder="Search by username">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-dark"><i class="bi bi-people-fill me-2"></i>QUẢN LÝ TÀI KHOẢN</h2>
+            <span class="badge bg-dark px-3 py-2" th:text="${accounts.size() + ' tài khoản'}"></span>
         </div>
 
-        <div class="col-md-3">
-            <input type="text"
-                   name="email"
-                   th:value="${email}"
-                   class="form-control"
-                   placeholder="Search by email">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body">
+                <form th:action="@{/admin/account/search}" method="get" class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label small fw-bold text-secondary">Username</label>
+                        <input type="text" name="username" th:value="${username}" class="form-control" placeholder="Ví dụ: admin01">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small fw-bold text-secondary">Email</label>
+                        <input type="text" name="email" th:value="${email}" class="form-control" placeholder="user@gmail.com">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small fw-bold text-secondary">Số điện thoại</label>
+                        <input type="text" name="phone" th:value="${phone}" class="form-control" placeholder="09xxx...">
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end gap-2">
+                        <button type="submit" class="btn btn-primary w-100 shadow-sm">
+                            <i class="bi bi-search me-1"></i> Lọc
+                        </button>
+                        <a th:href="@{/admin/account}" class="btn btn-outline-secondary w-100">
+                            <i class="bi bi-arrow-clockwise"></i> Reset
+                        </a>
+                    </div>
+                </form>
+            </div>
         </div>
 
-        <div class="col-md-3">
-            <input type="text"
-                   name="phone"
-                   th:value="${phone}"
-                   class="form-control"
-                   placeholder="Search by phone">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                        <tr class="text-center">
+                            <th width="5%">STT</th>
+                            <th class="text-start" width="20%">Thông tin User</th>
+                            <th width="15%">Số điện thoại</th>
+                            <th width="15%">Trạng thái</th>
+                            <th width="10%">Certified</th>
+                            <th width="15%">Thao tác</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="account, stat : ${accounts}"
+                            th:classappend="${!account.active} ? 'row-locked' : ''">
+
+                            <td class="text-center text-muted" th:text="${stat.index + 1}"></td>
+
+                            <td>
+                                <div class="d-flex flex-column">
+                                    <span class="fw-bold text-dark" th:text="${account.username}"></span>
+                                    <small class="text-muted" th:text="${account.email}"></small>
+                                </div>
+                            </td>
+
+                            <td class="text-center" th:text="${account.phone ?: '---'}"></td>
+
+                            <td class="text-center">
+                                <span th:if="${account.active}" class="badge rounded-pill bg-success-subtle text-success border border-success px-3">
+                                    <i class="bi bi-check-circle-fill me-1"></i> Hoạt động
+                                </span>
+                                <span th:unless="${account.active}" class="badge rounded-pill bg-danger-subtle text-danger border border-danger px-3">
+                                    <i class="bi bi-lock-fill me-1"></i> Đã khóa
+                                </span>
+                            </td>
+
+                            <td class="text-center">
+                                <span th:if="${account.certified}" class="text-primary fs-5" title="Đã chứng thực">
+                                    <i class="bi bi-patch-check-fill"></i>
+                                </span>
+                                <span th:unless="${account.certified}" class="text-secondary opacity-25 fs-5">
+                                    <i class="bi bi-patch-check"></i>
+                                </span>
+                            </td>
+
+                            <td class="text-center">
+                                <div class="btn-group shadow-sm">
+                                    <a th:href="@{/admin/account/detail/{id}(id=${account.accountId})}"
+                                       class="btn btn-white btn-sm border" title="Xem chi tiết">
+                                        <i class="bi bi-eye-fill text-info"></i>
+                                    </a>
+
+                                    <a th:if="${account.active}"
+                                       th:href="@{/admin/account/lock/{id}(id=${account.accountId})}"
+                                       class="btn btn-white btn-sm border"
+                                       onclick="return confirm('Bạn có chắc chắn muốn KHÓA tài khoản này không? Người dùng sẽ không thể đăng nhập.')"
+                                       title="Khóa tài khoản">
+                                        <i class="bi bi-lock-fill text-danger"></i>
+                                    </a>
+
+                                    <a th:unless="${account.active}"
+                                       th:href="@{/admin/account/unlock/{id}(id=${account.accountId})}"
+                                       class="btn btn-white btn-sm border"
+                                       onclick="return confirm('Mở khóa cho tài khoản này?')"
+                                       title="Mở khóa tài khoản">
+                                        <i class="bi bi-unlock-fill text-success"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(accounts)}">
+                            <td colspan="6" class="text-center py-5">
+                                <i class="bi bi-search fs-1 text-secondary opacity-25"></i>
+                                <p class="mt-2 text-secondary">Không tìm thấy tài khoản nào phù hợp.</p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
-        <div class="col-md-3">
-            <button type="submit" class="btn btn-primary">
-                <i class="bi bi-search"></i> Search
-            </button>
-
-            <a th:href="@{/admin/account}" class="btn btn-secondary">
-                Reset
-            </a>
-        </div>
-
-    </form>
-
-    <h2 class="mb-4 text-center">Account Management</h2>
-
-    <table class="table table-bordered table-hover align-middle">
-
-        <thead class="table-dark text-center">
-        <tr>
-            <th>STT</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Address</th>
-            <th>Certified</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-
-        <tbody>
-
-        <!-- Account List -->
-        <tr th:each="account, stat : ${accounts}">
-
-            <td class="text-center"
-                th:text="${stat.index + 1}">
-            </td>
-
-            <td th:text="${account.username}"></td>
-            <td th:text="${account.email}"></td>
-            <td th:text="${account.phone}"></td>
-            <td th:text="${account.address}"></td>
-
-            <!-- Certified Column -->
-            <td class="text-center">
-
-                <span th:if="${account.certified}" class="text-success">
-                    <i class="bi bi-patch-check-fill"></i>
-                </span>
-
-                <span th:unless="${account.certified}" class="text-secondary">
-                    <i class="bi bi-x-circle"></i>
-                </span>
-
-            </td>
-
-            <!-- Action Column -->
-            <td class="text-center">
-
-                <!-- Detail -->
-                <a th:href="@{/admin/account/detail/{id}(id=${account.accountId})}"
-                   class="btn btn-info btn-sm">
-                    <i class="bi bi-eye"></i>
-                </a>
-
-                <!-- Lock -->
-                <a th:if="${account.active}"
-                   th:href="@{/admin/account/lock/{id}(id=${account.accountId})}"
-                   class="btn btn-danger btn-sm"
-                   onclick="return confirm('Lock this account?')">
-                    <i class="bi bi-lock-fill"></i>
-                </a>
-
-                <!-- Unlock -->
-                <a th:unless="${account.active}"
-                   th:href="@{/admin/account/unlock/{id}(id=${account.accountId})}"
-                   class="btn btn-success btn-sm"
-                   onclick="return confirm('Unlock this account?')">
-                    <i class="bi bi-unlock-fill"></i>
-                </a>
-
-            </td>
-
-        </tr>
-
-        <!-- No Data -->
-        <tr th:if="${#lists.isEmpty(accounts)}">
-            <td colspan="7" class="text-center text-danger">
-                No accounts found
-            </td>
-        </tr>
-
-        </tbody>
-
-    </table>
-
+    </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
