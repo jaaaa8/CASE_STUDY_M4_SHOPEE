@@ -19,18 +19,15 @@
         <!-- Card Header -->
         <div class="card-header bg-primary text-white rounded-top-4 d-flex justify-content-between align-items-center">
             <h4 class="mb-0">
-                <i class="bi bi-box-seam"></i> Product Management
+                <i class="bi bi-box-seam"></i> Quản lí Sản phẩm
             </h4>
 
-            <a href="#" class="btn btn-light btn-sm">
-                <i class="bi bi-plus-circle"></i> Add Product
-            </a>
         </div>
         <form th:action="@{/admin/product/search}" method="get" class="row g-3 mb-3">
 
             <!-- Product Name -->
             <div class="col-md-4">
-                <label class="form-label">Product Name</label>
+                <label class="form-label">Tên sản phẩm</label>
                 <input type="text"
                        name="name"
                        class="form-control"
@@ -39,7 +36,7 @@
 
             <!-- Shop Name -->
             <div class="col-md-4">
-                <label class="form-label">Shop Name</label>
+                <label class="form-label">Tên shop</label>
                 <input type="text"
                        name="shopName"
                        class="form-control"
@@ -48,11 +45,11 @@
 
             <!-- Category -->
             <div class="col-md-3">
-                <label class="form-label">Category</label>
+                <label class="form-label">Danh mục</label>
                 <select name="categoryId" class="form-select">
                     <option value="">All Category</option>
                     <option th:each="c : ${categories}"
-                            th:value="${c.id}"
+                            th:value="${c.categoryId}"
                             th:text="${c.name}">
                     </option>
                 </select>
@@ -76,12 +73,12 @@
                     <thead class="table-dark">
                     <tr>
                         <th>#</th>
-                        <th>Name</th>
-                        <th>Image</th>
-                        <th>Stock</th>
-                        <th>Category</th>
-                        <th>Seller</th>
-                        <th>Action</th>
+                        <th>Tên</th>
+                        <th>Hình ảnh</th>
+                        <th>Tồn hàng</th>
+                        <th>Danh mục</th>
+                        <th>Tên shop</th>
+                        <th>Thao tác</th>
                     </tr>
                     </thead>
 
@@ -131,11 +128,6 @@
                                 <i class="bi bi-eye"></i>
                             </a>
 
-                            <!-- Edit -->
-                            <a href="#"
-                               class="btn btn-sm btn-outline-warning me-1">
-                                <i class="bi bi-pencil-square"></i>
-                            </a>
 
                             <!-- Delete -->
                             <a th:href="@{/admin/product/delete/{id}(id=${product.productId})}"
