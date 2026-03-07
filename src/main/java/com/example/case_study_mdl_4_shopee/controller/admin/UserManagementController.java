@@ -59,7 +59,7 @@ public class UserManagementController {
             @RequestParam(required = false) String phone,
             Model model) {
 
-        List<Account> accounts = userManagementService.search(username, email, phone);
+        List<AccountForAdminDto> accounts = userManagementService.search(username, email, phone);
 
         model.addAttribute("accounts", accounts);
         model.addAttribute("username", username);

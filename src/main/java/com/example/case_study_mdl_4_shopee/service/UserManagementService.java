@@ -64,44 +64,35 @@ public class UserManagementService implements IUserManagementService {
     }
 
     @Override
+    @Transactional
     public void lockUserAccount(Long userId) {
-
-        AccountRole accountRole = accountRoleRepository
-                .findAllByAccount_AccountId(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        accountRole.setActive(false);
-
-        accountRoleRepository.save(accountRole);
+        // Tìm tất cả các role của user này
+        List<AccountRole> roles = accountRoleRepository.findAllByAccount_AccountId(userId);
+        if (!roles.isEmpty()) {
+            roles.forEach(role -> role.setActive(false));
+            accountRoleRepository.saveAll(roles);
+        }
     }
 
     @Override
-    public List<Account> search(String username, String email, String phone) {
-        if (username != null && username.trim().isEmpty()) {
-            username = null;
-        }
-
-        if (email != null && email.trim().isEmpty()) {
-            email = null;
-        }
-
-        if (phone != null && phone.trim().isEmpty()) {
-            phone = null;
-        }
-
-        return accountRepository.searchMulti(username, email, phone);
-    }
-
-    @Override
+    @Transactional
     public void unlockUserAccount(Long userId) {
-        AccountRole accountRole = accountRoleRepository
-                .findAllByAccount_AccountId(userId)
-                .orElse(null);
-        if (accountRole != null) {
-            accountRole.setActive(true);
-            accountRoleRepository.save(accountRole);
+        List<AccountRole> roles = accountRoleRepository.findAllByAccount_AccountId(userId);
+        if (!roles.isEmpty()) {
+            roles.forEach(role -> role.setActive(true));
+            accountRoleRepository.saveAll(roles);
         }
     }
+
+    public List<AccountForAdminDto> search(String username, String email, String phone) {
+
+        List<Account> accounts = accountRepository.searchMulti(username,email,phone);
+
+        return accounts.stream()
+                .map(AccountForAdminDto::new)
+                .toList();
+    }
+
 
     @Override
     public void grantCertificatedSeller(Long userId) {

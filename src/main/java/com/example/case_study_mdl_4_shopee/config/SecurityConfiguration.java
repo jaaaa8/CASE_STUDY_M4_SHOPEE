@@ -82,13 +82,18 @@ public class SecurityConfiguration {
     }
 
 
+//
 //    @Bean
 //    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//
 //        http
-//            .csrf(AbstractHttpConfigurer::disable)
-//            .authorizeHttpRequests(auth -> auth
-//                .anyRequest().permitAll()
-//            );
+//                .csrf(AbstractHttpConfigurer::disable)
+//                .authorizeHttpRequests(auth -> auth
+//                        .anyRequest().permitAll()
+//                )
+//                .formLogin(AbstractHttpConfigurer::disable)
+//                .httpBasic(AbstractHttpConfigurer::disable);
+//
 //        return http.build();
 //    }
 }

@@ -10,7 +10,7 @@ public interface IUserManagementService {
     Account findByUsername(String username);
     Account findById(Long id);
     void lockUserAccount(Long userId);
-    public List<Account> search(String username, String email, String phone);
+    public List<AccountForAdminDto> search(String username, String email, String phone);
     // khóa tài khoản người dùng
 
     void unlockUserAccount(Long userId);

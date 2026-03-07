@@ -1,13 +1,20 @@
 package com.example.case_study_mdl_4_shopee.repository;
 
 import com.example.case_study_mdl_4_shopee.entity.AccountRole;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface IAccountRoleRepository extends JpaRepository<AccountRole,Long> {
-    Optional<AccountRole> findAllByAccount_AccountId(Long accountId);
 
-    List<AccountRole> findByAccount_AccountId(Long accountId);
+
+    List<AccountRole> findAllByAccount_AccountId(Long accountId);
+    @Modifying
+    @Transactional
+    @Query("UPDATE AccountRole ar SET ar.active = :status WHERE ar.account.accountId = :accountId")
+    void updateStatusByAccountId(Long accountId, boolean status);
 }
