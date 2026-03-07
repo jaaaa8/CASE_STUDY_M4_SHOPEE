@@ -26,6 +26,9 @@ public class Account {
     private String email;
     private String phone;
     private String address;
+    @ManyToOne
+    @JoinColumn(name = "cityId")
+    private City city;
     private Long balance = 0L;
     private boolean certified = false;
     @CreationTimestamp

@@ -5,7 +5,7 @@ import com.example.case_study_mdl_4_shopee.dto.ShipmentTrackingDto;
 
 import java.util.List;
 
-public interface ICustomerShipmentTrackingService {
+public interface ITrackingService {
     List<ShipmentTrackingDto> getTrackingBySubOrder(Long subOrderId);
     OrderTrackingDto getTrackingByOrder(Long orderId);
     OrderTrackingDto getTrackingByOrder(Long customerId, Long orderId);

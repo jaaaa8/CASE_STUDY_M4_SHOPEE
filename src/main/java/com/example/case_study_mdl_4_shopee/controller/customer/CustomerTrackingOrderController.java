@@ -2,7 +2,7 @@ package com.example.case_study_mdl_4_shopee.controller.customer;
 
 import com.example.case_study_mdl_4_shopee.dto.OrderTrackingDto;
 import com.example.case_study_mdl_4_shopee.entity.Account;
-import com.example.case_study_mdl_4_shopee.service.CustomerShipmentTrackingService;
+import com.example.case_study_mdl_4_shopee.service.TrackingService;
 import com.example.case_study_mdl_4_shopee.service.impl.IAuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CustomerTrackingOrderController {
 
-    private final CustomerShipmentTrackingService trackingService;
+    private final TrackingService trackingService;
     private final IAuthenticationService authenticationService;
 
     @GetMapping("/{orderId}/tracking")

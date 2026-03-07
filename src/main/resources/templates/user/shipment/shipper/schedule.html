@@ -1,10 +1,109 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Shipper Schedule</title>
+
+    <style>
+
+        body{
+            font-family: Arial, sans-serif;
+            background:#f5f5f5;
+            margin:0;
+            padding:20px;
+        }
+
+        h1{
+            text-align:center;
+        }
+
+        #taskList{
+            max-width:800px;
+            margin:auto;
+        }
+
+        .task{
+            padding:15px;
+            margin:10px 0;
+            border-radius:8px;
+            color:white;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        /* pickup task */
+
+        .pickup{
+            background:#2ecc71;
+        }
+
+        /* delivery task */
+
+        .delivery{
+            background:#f39c12;
+        }
+
+        button{
+            border:none;
+            padding:8px 12px;
+            border-radius:5px;
+            cursor:pointer;
+        }
+
+    </style>
+
 </head>
+
 <body>
+
+<h1>Shipper Schedule</h1>
+
+<div id="taskList"></div>
+
+<script>
+
+    const shipperId = 5; // demo
+
+    fetch(`/shipper/orders/tasks/${shipperId}`)
+        .then(res => res.json())
+        .then(tasks => {
+
+            const container = document.getElementById("taskList");
+
+            tasks.forEach(task => {
+
+                const div = document.createElement("div");
+
+                if(task.type === "PICKUP"){
+                    div.className = "task pickup";
+                }else{
+                    div.className = "task delivery";
+                }
+
+                div.innerHTML = `
+            <div>
+                <strong>Task #${task.taskId}</strong><br>
+                Warehouse: ${task.warehouse?.name || "Unknown"}
+            </div>
+            <button onclick="viewTask(${task.taskId})">
+                View Orders
+            </button>
+        `;
+
+                container.appendChild(div);
+            });
+
+        });
+
+    function viewTask(taskId){
+
+        window.location.href = `/task-detail.html?taskId=${taskId}`;
+
+    }
+
+</script>
 
 </body>
 </html>

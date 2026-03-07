@@ -1,5 +1,7 @@
 package com.example.case_study_mdl_4_shopee.service.impl;
 
+import com.example.case_study_mdl_4_shopee.entity.SubOrders;
+
 public interface ISellerOrderService {
     void confirmOrder(Long orderId);
     // xác nhận đơn hàng bởi người bán, chuyển trạng thái từ "PENDING" sang "CONFIRMED"
@@ -9,4 +11,6 @@ public interface ISellerOrderService {
 
     void shipOrder(Long orderId);
     // đánh dấu đơn hàng đã được giao, chuyển trạng thái từ "CONFIRMED" sang "SHIPPED"
+
+    void assignWarehouse(SubOrders subOrder);
 }

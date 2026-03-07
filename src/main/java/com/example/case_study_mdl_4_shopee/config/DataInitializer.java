@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Configuration
 public class DataInitializer {
 
@@ -18,7 +21,9 @@ public class DataInitializer {
             IWarehouseRepository warehouseRepository,
             IWarehouseStaffRepository warehouseStaffRepository,
             IProductRepository productRepository,
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder,
+            ILocationRepository locationRepository,
+            ICityRepository cityRepository) {
 
         return args -> {
 
@@ -33,11 +38,102 @@ public class DataInitializer {
 
 
             /* =========================
+               CREATE LOCATION
+            ========================= */
+
+            Location north = createLocation(locationRepository, "North");
+            Location mid = createLocation(locationRepository, "Mid");
+            Location south = createLocation(locationRepository, "South");
+
+
+            /* =========================
+               CREATE CITIES
+            ========================= */
+
+            if(cityRepository.count() == 0){
+
+                List<City> cities = new ArrayList<>();
+
+                // NORTH
+                cities.add(new City(null,"Hà Nội",north));
+                cities.add(new City(null,"Hải Phòng",north));
+                cities.add(new City(null,"Quảng Ninh",north));
+                cities.add(new City(null,"Bắc Ninh",north));
+                cities.add(new City(null,"Bắc Giang",north));
+                cities.add(new City(null,"Hải Dương",north));
+                cities.add(new City(null,"Hưng Yên",north));
+                cities.add(new City(null,"Thái Bình",north));
+                cities.add(new City(null,"Nam Định",north));
+                cities.add(new City(null,"Ninh Bình",north));
+                cities.add(new City(null,"Hà Nam",north));
+                cities.add(new City(null,"Phú Thọ",north));
+                cities.add(new City(null,"Vĩnh Phúc",north));
+                cities.add(new City(null,"Lào Cai",north));
+                cities.add(new City(null,"Yên Bái",north));
+                cities.add(new City(null,"Tuyên Quang",north));
+                cities.add(new City(null,"Hà Giang",north));
+                cities.add(new City(null,"Cao Bằng",north));
+                cities.add(new City(null,"Bắc Kạn",north));
+                cities.add(new City(null,"Lạng Sơn",north));
+                cities.add(new City(null,"Thái Nguyên",north));
+                cities.add(new City(null,"Sơn La",north));
+                cities.add(new City(null,"Điện Biên",north));
+                cities.add(new City(null,"Lai Châu",north));
+                cities.add(new City(null,"Hòa Bình",north));
+
+                // MID
+                cities.add(new City(null,"Thanh Hóa",mid));
+                cities.add(new City(null,"Nghệ An",mid));
+                cities.add(new City(null,"Hà Tĩnh",mid));
+                cities.add(new City(null,"Quảng Bình",mid));
+                cities.add(new City(null,"Quảng Trị",mid));
+                cities.add(new City(null,"Thừa Thiên Huế",mid));
+                cities.add(new City(null,"Đà Nẵng",mid));
+                cities.add(new City(null,"Quảng Nam",mid));
+                cities.add(new City(null,"Quảng Ngãi",mid));
+                cities.add(new City(null,"Bình Định",mid));
+                cities.add(new City(null,"Phú Yên",mid));
+                cities.add(new City(null,"Khánh Hòa",mid));
+                cities.add(new City(null,"Ninh Thuận",mid));
+                cities.add(new City(null,"Bình Thuận",mid));
+                cities.add(new City(null,"Kon Tum",mid));
+                cities.add(new City(null,"Gia Lai",mid));
+                cities.add(new City(null,"Đắk Lắk",mid));
+                cities.add(new City(null,"Đắk Nông",mid));
+                cities.add(new City(null,"Lâm Đồng",mid));
+
+                // SOUTH
+                cities.add(new City(null,"TP Hồ Chí Minh",south));
+                cities.add(new City(null,"Bình Dương",south));
+                cities.add(new City(null,"Đồng Nai",south));
+                cities.add(new City(null,"Bà Rịa Vũng Tàu",south));
+                cities.add(new City(null,"Tây Ninh",south));
+                cities.add(new City(null,"Bình Phước",south));
+
+                cities.add(new City(null,"Long An",south));
+                cities.add(new City(null,"Tiền Giang",south));
+                cities.add(new City(null,"Bến Tre",south));
+                cities.add(new City(null,"Trà Vinh",south));
+                cities.add(new City(null,"Vĩnh Long",south));
+                cities.add(new City(null,"Đồng Tháp",south));
+                cities.add(new City(null,"An Giang",south));
+                cities.add(new City(null,"Kiên Giang",south));
+                cities.add(new City(null,"Hậu Giang",south));
+                cities.add(new City(null,"Sóc Trăng",south));
+                cities.add(new City(null,"Bạc Liêu",south));
+                cities.add(new City(null,"Cà Mau",south));
+                cities.add(new City(null,"Cần Thơ",south));
+
+                cityRepository.saveAll(cities);
+            }
+
+            /* =========================
                CREATE ADMIN
             ========================= */
 
             Account admin = createAccount(
                     accountRepository,
+                    cityRepository,
                     passwordEncoder,
                     "admin",
                     "admin@gmail.com",
@@ -57,6 +153,7 @@ public class DataInitializer {
 
             Account customer = createAccount(
                     accountRepository,
+                    cityRepository,
                     passwordEncoder,
                     "customer",
                     "customer@gmail.com",
@@ -73,6 +170,7 @@ public class DataInitializer {
 
             Account seller = createAccount(
                     accountRepository,
+                    cityRepository,
                     passwordEncoder,
                     "seller",
                     "seller@gmail.com",
@@ -92,6 +190,7 @@ public class DataInitializer {
                         Warehouse w = new Warehouse();
                         w.setName("Da Nang Warehouse");
                         w.setAddress("Da Nang");
+                        w.setLocation("Mid");
                         return warehouseRepository.save(w);
                     });
 
@@ -103,6 +202,7 @@ public class DataInitializer {
 
             Account adminShipper = createAccount(
                     accountRepository,
+                    cityRepository,
                     passwordEncoder,
                     "admin_shipper",
                     "admin_shipper@gmail.com",
@@ -131,6 +231,7 @@ public class DataInitializer {
 
             Account shipper = createAccount(
                     accountRepository,
+                    cityRepository,
                     passwordEncoder,
                     "shipper",
                     "shipper@gmail.com",
@@ -193,6 +294,7 @@ public class DataInitializer {
 
 
     private Account createAccount(IAccountRepository accountRepository,
+                                  ICityRepository cityRepository,
                                   PasswordEncoder passwordEncoder,
                                   String username,
                                   String email,
@@ -208,9 +310,31 @@ public class DataInitializer {
                     account.setPhone(phone);
                     account.setAddress("Da Nang");
 
+                    City city = cityRepository.findByName("Đà Nẵng");
+
+                    if(city == null){
+                        throw new RuntimeException("City not found");
+                    }
+
+                    account.setCity(city);
+
                     return accountRepository.save(account);
                 });
     }
 
+    private Location createLocation(ILocationRepository locationRepository, String name) {
+
+        Location location = locationRepository.findByName(name);
+
+        if (location == null) {
+
+            location = new Location();
+            location.setName(name);
+
+            locationRepository.save(location);
+        }
+
+        return location;
+    }
 
 }

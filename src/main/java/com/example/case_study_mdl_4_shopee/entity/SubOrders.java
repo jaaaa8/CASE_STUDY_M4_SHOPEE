@@ -18,7 +18,8 @@ import java.util.List;
 @Table(indexes = {
         @Index(name = "idx_suborder_order", columnList = "orderId"),
         @Index(name = "idx_suborder_seller", columnList = "sellerId"),
-        @Index(name = "idx_suborder_shipper", columnList = "shipperId")
+        @Index(name = "idx_suborder_shipper", columnList = "shipperId"),
+        @Index(name = "idx_suborder_task", columnList = "taskId")
 })
 public class SubOrders {
     @Id
@@ -43,6 +44,9 @@ public class SubOrders {
     @ManyToOne
     @JoinColumn(name = "warehouseId")
     private Warehouse warehouse;
+    @ManyToOne
+    @JoinColumn(name = "taskId")
+    private ShippingTask shippingTask;
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private SubOrderStatus status = SubOrderStatus.PENDING;

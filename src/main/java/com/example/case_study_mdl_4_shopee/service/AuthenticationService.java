@@ -2,6 +2,7 @@ package com.example.case_study_mdl_4_shopee.service;
 
 import com.example.case_study_mdl_4_shopee.entity.Account;
 import com.example.case_study_mdl_4_shopee.entity.AccountRole;
+import com.example.case_study_mdl_4_shopee.entity.City;
 import com.example.case_study_mdl_4_shopee.entity.Role;
 import com.example.case_study_mdl_4_shopee.repository.IAccountRepository;
 import com.example.case_study_mdl_4_shopee.repository.IRoleRepository;
@@ -19,8 +20,6 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Service
 public class AuthenticationService implements IAuthenticationService {
@@ -43,7 +42,7 @@ public class AuthenticationService implements IAuthenticationService {
     }
 
     @Override
-    public boolean register(String username, String password, String email, String phone, String address) {
+    public boolean register(String username, String password, String email, String phone, String address, City city) {
         try {
 
             if (accountRepository.findByUsername(username).isPresent()) {
@@ -66,6 +65,7 @@ public class AuthenticationService implements IAuthenticationService {
             account.setEmail(email);
             account.setPhone(phone);
             account.setAddress(address);
+            account.setCity(city);
 
             AccountRole accountRole = new AccountRole();
             accountRole.setAccount(account);

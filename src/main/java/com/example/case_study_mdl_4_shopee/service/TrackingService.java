@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class CustomerShipmentTrackingService {
+public class TrackingService {
 
     private final IShipmentTrackingRepository shipmentTrackingRepository;
     private final IOrdersRepository ordersRepository;

@@ -2,6 +2,7 @@ package com.example.case_study_mdl_4_shopee.repository;
 
 import com.example.case_study_mdl_4_shopee.dto.AccountForAdminDto;
 import com.example.case_study_mdl_4_shopee.entity.Account;
+import com.example.case_study_mdl_4_shopee.entity.Warehouse;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -30,4 +31,6 @@ public interface IAccountRepository extends JpaRepository<Account, Long> {
             @Param("email") String email,
             @Param("phone") String phone
     );
+
+    List<Account> findShipperByWarehouse(Long warehouseId);
 }

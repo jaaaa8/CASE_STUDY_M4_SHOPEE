@@ -21,6 +21,7 @@ public class Warehouse {
     private Long warehouseId;
     private String name;
     private String address;
+    private String location;
 
     @OneToMany(mappedBy = "warehouse")
     private Set<WarehouseStaff> staff = new HashSet<>();

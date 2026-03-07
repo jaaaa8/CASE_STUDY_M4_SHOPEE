@@ -70,6 +70,18 @@
                         </div>
 
                         <div class="mb-3">
+                            <select name="cityId" class="form-control">
+                                <option value="">-- Chọn tỉnh/thành phố --</option>
+
+                                <option th:each="city : ${cities}"
+                                        th:value="${city.cityId}"
+                                        th:text="${city.name}">
+                                </option>
+
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
                             <input type="password" name="password" class="form-control" placeholder="Mật khẩu">
                         </div>
 

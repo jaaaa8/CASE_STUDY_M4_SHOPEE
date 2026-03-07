@@ -2,6 +2,8 @@ package com.example.case_study_mdl_4_shopee.repository;
 
 import com.example.case_study_mdl_4_shopee.entity.SubOrders;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -9,5 +11,10 @@ import java.util.Optional;
 
 @Repository
 public interface ISubOrdersRepository extends JpaRepository<SubOrders, Long> {
-
+    @Query("""
+       SELECT s
+       FROM SubOrders s
+       WHERE s.shippingTask.taskId = :taskId
+       """)
+    List<SubOrders> findSubOrdersByTaskId(@Param("taskId") Long taskId);
 }

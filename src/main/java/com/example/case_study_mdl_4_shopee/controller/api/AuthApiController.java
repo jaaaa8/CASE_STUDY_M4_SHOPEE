@@ -1,6 +1,8 @@
 package com.example.case_study_mdl_4_shopee.controller.api;
 
 import com.example.case_study_mdl_4_shopee.entity.Account;
+import com.example.case_study_mdl_4_shopee.entity.City;
+import com.example.case_study_mdl_4_shopee.repository.ICityRepository;
 import com.example.case_study_mdl_4_shopee.service.impl.IAuthenticationService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,11 +19,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/api/auth")
 public class AuthApiController {
-
+    private final ICityRepository cityRepository;
     private final IAuthenticationService authenticationService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthApiController(IAuthenticationService authenticationService, AuthenticationManager authenticationManager) {
+    public AuthApiController(ICityRepository cityRepository, IAuthenticationService authenticationService, AuthenticationManager authenticationManager) {
+        this.cityRepository = cityRepository;
         this.authenticationService = authenticationService;
         this.authenticationManager = authenticationManager;
     }
@@ -63,14 +66,21 @@ public class AuthApiController {
     }
 
     @PostMapping("/register")
-    public String register(Account account) {
+    public String register(Account account,
+                           @RequestParam Long cityId) {
+
+        City city = cityRepository.findById(cityId)
+                .orElseThrow(() -> new RuntimeException("City not found"));
+
+        account.setCity(city);
 
         boolean result = authenticationService.register(
                 account.getUsername(),
                 account.getPassword(),
                 account.getEmail(),
                 account.getPhone(),
-                account.getAddress()
+                account.getAddress(),
+                city
         );
 
         if (!result) {
