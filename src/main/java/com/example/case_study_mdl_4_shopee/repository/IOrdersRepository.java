@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -36,4 +37,13 @@ public interface IOrdersRepository extends JpaRepository<Orders, Long> {
     );
     List<Orders> findTop5ByOrderByCreatedAtDesc();
 
+    Optional<Orders> findByOrdersIdAndCustomerOrder_AccountId(Long orderId, Long customerId);
+    @Query("""
+    SELECT o
+    FROM Orders o
+    LEFT JOIN FETCH o.subOrders
+    WHERE o.ordersId = :orderId
+    AND o.customerOrder.accountId = :customerId
+    """)
+    Optional<Orders> findOrderWithSubOrders(Long orderId, Long customerId);
 }
