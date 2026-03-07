@@ -45,6 +45,9 @@ public class DataInitializer {
             );
 
             admin.addRole(adminRole);
+            admin.addRole(customerRole);
+            admin.addRole(sellerRole);
+
             accountRepository.save(admin);
 
 
@@ -137,7 +140,7 @@ public class DataInitializer {
             shipper.addRole(shipperRole);
             accountRepository.save(shipper);
 
-            warehouseStaffRepository.findById(adminShipper.getAccountId())
+            warehouseStaffRepository.findById(shipper.getAccountId())
                     .orElseGet(() -> {
                         WarehouseStaff staff = WarehouseStaff.builder()
                                 .account(shipper)

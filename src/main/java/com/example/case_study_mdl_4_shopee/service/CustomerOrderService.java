@@ -3,6 +3,7 @@ package com.example.case_study_mdl_4_shopee.service;
 import com.example.case_study_mdl_4_shopee.entity.*;
 import com.example.case_study_mdl_4_shopee.enums.OrderStatus;
 import com.example.case_study_mdl_4_shopee.enums.SubOrderStatus;
+import com.example.case_study_mdl_4_shopee.enums.TrackingStatus;
 import com.example.case_study_mdl_4_shopee.enums.TransactionType;
 import com.example.case_study_mdl_4_shopee.repository.*;
 import com.example.case_study_mdl_4_shopee.service.impl.ICustomerOrderService;
@@ -20,6 +21,7 @@ public class CustomerOrderService implements ICustomerOrderService {
     private final IAccountRepository accountRepository;
     private final ISubOrdersRepository subOrdersRepository;
     private final ITransactionHistoryRepository transactionRepository;
+    private final IShipmentTrackingRepository shipmentTrackingRepository;
 
     private final IProductRepository productRepository;
     private final IOrderItemsRepository orderItemsRepository;
@@ -137,6 +139,7 @@ public class CustomerOrderService implements ICustomerOrderService {
                         .build());
             }
         }
+        createInitialTrackingForOrder(order);
         return order;
     }
 
@@ -196,5 +199,21 @@ public class CustomerOrderService implements ICustomerOrderService {
     @Override
     public Orders findById(Long orderId) {
         return ordersRepository.findById(orderId).orElse(null);
+    }
+
+    private void createInitialTrackingForOrder(Orders order) {
+
+        for (SubOrders subOrder : order.getSubOrders()) {
+
+            ShipmentTracking tracking = ShipmentTracking.builder()
+                    .subOrder(subOrder)
+                    .status(TrackingStatus.OUT_FOR_PICKUP) // trạng thái đầu
+                    .note("Đơn hàng vừa được tạo, chờ shipper lấy hàng")
+                    .warehouse(null)     // chưa vào kho
+                    .updatedBy(null)     // chưa có ai cập nhật
+                    .build();
+
+            shipmentTrackingRepository.save(tracking);
+        }
     }
 }

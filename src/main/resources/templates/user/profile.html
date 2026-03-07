@@ -43,7 +43,10 @@
                     
                     <div th:each="order : ${orders}" class="mb-4 border rounded p-3">
                         <div class="d-flex justify-content-between border-bottom pb-2 mb-2">
-                            <span class="fw-bold" th:text="'Mã đơn hàng: ' + ${order.orderCode}">#000</span>
+                            <a class="fw-bold text-decoration-none"
+                               th:href="@{/customer/orders/{orderId}/tracking(orderId=${order.ordersId}, customerId=${order.customerOrder.accountId})}">
+                                <span th:text="'Mã đơn hàng: ' + ${order.orderCode}">#000</span>
+                            </a>
                             <span class="text-danger fw-bold" th:text="${order.orderStatus}">STATUS</span>
                         </div>
                         

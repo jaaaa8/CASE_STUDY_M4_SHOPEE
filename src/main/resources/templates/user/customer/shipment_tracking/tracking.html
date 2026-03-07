@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head}">
+    <title>Theo dõi đơn hàng | Shopee</title>
+
+    <style>
+
+        .shopee-color{
+            color:#ee4d2d;
+        }
+
+        .tracking-container{
+            position: relative;
+        }
+
+        .timeline{
+            width:20px;
+            position: relative;
+        }
+
+        .timeline-dot{
+            width:10px;
+            height:10px;
+            background:#ee4d2d;
+            border-radius:50%;
+            margin-top:6px;
+        }
+
+        .timeline-line{
+            width:2px;
+            background:#ddd;
+            height:100%;
+            margin-left:4px;
+        }
+
+        .tracking-item:last-child .timeline-line{
+            display:none;
+        }
+
+        .tracking-content{
+            font-size:14px;
+        }
+
+        .tracking-status{
+            font-weight:bold;
+            color:#ee4d2d;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div th:replace="~{layout/main :: header}"></div>
+
+<main class="container my-4">
+
+    <!-- Order Header -->
+    <div class="bg-white p-3 rounded shadow-sm mb-3">
+
+        <div class="d-flex justify-content-between">
+
+            <div>
+                <span class="fw-bold">Mã đơn hàng:</span>
+
+                <span class="shopee-color"
+                      th:text="${orderTracking.orderId}">
+                    ORD_001
+                </span>
+            </div>
+
+            <div class="text-danger fw-bold">
+                Theo dõi vận chuyển
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SUB ORDERS -->
+
+    <div th:each="subOrder : ${orderTracking.subOrders}"
+         class="bg-white p-3 rounded shadow-sm mb-4">
+
+        <!-- Shop -->
+        <div class="border-bottom pb-2 mb-3 d-flex align-items-center">
+
+            <i class="fas fa-store me-2 shopee-color"></i>
+
+            <span class="fw-bold"
+                  th:text="'Shop #' + ${subOrder.sellerName}">
+                Tên Shop
+            </span>
+
+        </div>
+
+
+        <!-- Tracking Timeline -->
+
+        <div class="tracking-container">
+
+            <div th:each="tracking : ${subOrder.trackings}"
+                 class="tracking-item d-flex mb-4">
+
+                <!-- Timeline -->
+
+                <div class="timeline">
+
+                    <div class="timeline-dot"></div>
+
+                    <div class="timeline-line"></div>
+
+                </div>
+
+
+                <!-- Tracking Content -->
+
+                <div class="tracking-content ms-3">
+
+                    <div class="tracking-status"
+                         th:text="${tracking.status}">
+                    </div>
+
+
+                    <div class="text-muted small"
+                         th:if="${tracking.note != null}"
+                         th:text="${tracking.note}">
+                        Đơn hàng vừa được tạo
+                    </div>
+
+
+                    <div class="text-muted small"
+                         th:text="${#temporals.format(tracking.createdAt,'dd/MM/yyyy HH:mm')}">
+                        07/03/2026 14:20
+                    </div>
+
+
+                    <!-- Warehouse -->
+
+                    <div class="small text-secondary"
+                         th:if="${tracking.warehouseName != null}"
+                         th:text="'Kho: ' + ${tracking.warehouseName}">
+                        Kho Đà Nẵng
+                    </div>
+
+
+                    <div class="small text-secondary"
+                         th:if="${tracking.warehouseName == null}">
+                        Đang chờ xác nhận kho
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+<div th:replace="~{layout/main :: footer}"></div>
+
+</body>
+</html>
