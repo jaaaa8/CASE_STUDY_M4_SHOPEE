@@ -30,17 +30,19 @@ public class ShipmentTracking {
     private SubOrders subOrder;
 
     // id kho hàng để biết đơn hàng đang ở đâu
-    @ManyToOne
-    @JoinColumn(name = "warehouseId", nullable = false)
+    // kho hàng có thể null lúc đầu
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "warehouseId" , nullable = true)
     private Warehouse warehouse;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private TrackingStatus status;
 
     // admin hoặc shipper nào cập nhật trạng thái đơn hàng lần cuối
-    @ManyToOne
-    @JoinColumn(name = "updatedBy")
+    // người cập nhật có thể null
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "updatedBy", nullable = true)
     private Account updatedBy;
 
     private String note;

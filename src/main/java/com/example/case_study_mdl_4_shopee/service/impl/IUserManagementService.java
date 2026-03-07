@@ -9,9 +9,8 @@ public interface IUserManagementService {
     List<AccountForAdminDto> listAccounts();
     Account findByUsername(String username);
     Account findById(Long id);
-    void deleteUserAccount(Long userId);
-    void addAdminAccount(Account account);
     void lockUserAccount(Long userId);
+    public List<AccountForAdminDto> search(String username, String email, String phone);
     // khóa tài khoản người dùng
 
     void unlockUserAccount(Long userId);
@@ -19,7 +18,9 @@ public interface IUserManagementService {
 
     void grantCertificatedSeller(Long userId);
     // cấp quyền người bán uy tín cho tài khoản người dùng
-
+    void deleteUserAccount(Long userId);
+    void addAdminAccount(Account account);
+    void removeCertificatedSeller(Long id);
     void deposit(Long userId, Long amount);
 
     Account getCurrentAccount();

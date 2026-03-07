@@ -1,5 +1,7 @@
 package com.example.case_study_mdl_4_shopee.dto;
 
+import com.example.case_study_mdl_4_shopee.entity.Account;
+import com.example.case_study_mdl_4_shopee.entity.AccountRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,4 +19,17 @@ public class AccountForAdminDto {
     private String address;
     private boolean active;
     private boolean certified;
-}
+
+    public AccountForAdminDto(Account account) {
+        this.accountId = account.getAccountId();
+        this.username = account.getUsername();
+        this.email = account.getEmail();
+        this.phone = account.getPhone();
+        if (account.getAccountRoles() == null || account.getAccountRoles().isEmpty()) {
+            this.active = true;
+        } else {
+            this.active = account.getAccountRoles().stream()
+                    .anyMatch(ar -> ar.isActive());
+        }
+
+    }}

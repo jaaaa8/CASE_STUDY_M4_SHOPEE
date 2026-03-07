@@ -2,9 +2,11 @@ package com.example.case_study_mdl_4_shopee.service;
 
 import com.example.case_study_mdl_4_shopee.dto.AccountForAdminDto;
 import com.example.case_study_mdl_4_shopee.entity.Account;
+import com.example.case_study_mdl_4_shopee.entity.AccountRole;
 import com.example.case_study_mdl_4_shopee.entity.TransactionHistory;
 import com.example.case_study_mdl_4_shopee.enums.TransactionType;
 import com.example.case_study_mdl_4_shopee.repository.IAccountRepository;
+import com.example.case_study_mdl_4_shopee.repository.IAccountRoleRepository;
 import com.example.case_study_mdl_4_shopee.repository.ITransactionHistoryRepository;
 import com.example.case_study_mdl_4_shopee.service.impl.IUserManagementService;
 import lombok.RequiredArgsConstructor;
@@ -22,17 +24,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserManagementService implements IUserManagementService {
     private final IAccountRepository accountRepository;
+    private final IAccountRoleRepository accountRoleRepository;
     private final ITransactionHistoryRepository transactionRepository;
 
     @Autowired
     private ModelMapper modelMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public List<AccountForAdminDto> listAccounts() {
-        return accountRepository.findAll()
-                .stream()
-                .map(account -> modelMapper.map(account, AccountForAdminDto.class))
-                .toList();
+        List<Account> accounts = accountRepository.findAll();
+        return accounts.stream().map(acc -> {
+            // Ép Hibernate load roles ngay tại đây để tránh lỗi Lazy
+            acc.getAccountRoles().size();
+            return new AccountForAdminDto(acc);
+        }).toList();
     }
 
     @Override
@@ -56,22 +62,31 @@ public class UserManagementService implements IUserManagementService {
     }
 
     @Override
-    public void lockUserAccount(Long userId) {
-//        Account account = accountRepository.findById(userId).orElse(null);
-//        if (account != null) {
-//            account.setActive(false);
-//            accountRepository.save(account);
-//        }
+    public void removeCertificatedSeller(Long id) {
+
     }
 
     @Override
-    public void unlockUserAccount(Long userId) {
-//        Account account = accountRepository.findById(userId).orElse(null);
-//        if (account != null) {
-//            account.setActive(true);
-//            accountRepository.save(account);
-//        }
+    @Transactional
+    public void lockUserAccount(Long userId) {
+        accountRoleRepository.updateStatusByAccountId(userId, false);
     }
+
+    @Override
+    @Transactional
+    public void unlockUserAccount(Long userId) {
+        accountRoleRepository.updateStatusByAccountId(userId, true);
+    }
+
+    public List<AccountForAdminDto> search(String username, String email, String phone) {
+
+        List<Account> accounts = accountRepository.searchMulti(username,email,phone);
+
+        return accounts.stream()
+                .map(AccountForAdminDto::new)
+                .toList();
+    }
+
 
     @Override
     public void grantCertificatedSeller(Long userId) {

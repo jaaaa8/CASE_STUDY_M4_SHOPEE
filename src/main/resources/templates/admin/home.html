@@ -7,8 +7,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --admin-sidebar-width: 250px; --shopee-orange: #ee4d2d; }
-        body { background-color: #f8f9fa; }
+        :root {
+            --admin-sidebar-width: 250px;
+            --shopee-orange: #ee4d2d;
+        }
+
+        body {
+            background-color: #f8f9fa;
+        }
+
         .sidebar {
             width: var(--admin-sidebar-width);
             height: 100vh;
@@ -19,156 +26,122 @@
             color: white;
             padding-top: 20px;
         }
+
         .main-content {
             margin-left: var(--admin-sidebar-width);
             padding: 20px;
         }
+
         .sidebar .nav-link {
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.8);
             padding: 12px 20px;
         }
+
         .sidebar .nav-link:hover, .sidebar .nav-link.active {
             color: white;
-            background-color: rgba(255,255,255,0.1);
+            background-color: rgba(255, 255, 255, 0.1);
         }
+
         .stat-card {
             border: none;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <div class="text-center mb-4">
-            <h4 class="shopee-color fw-bold"><i class="fab fa-shopee me-2"></i>Admin</h4>
-        </div>
-        <nav class="nav flex-column">
-            <a class="nav-link active" href="/admin/home"><i class="fas fa-tachometer-alt me-2"></i>Tổng quan</a>
-            <a class="nav-link" href="/admin/account/account_list.html"><i class="fas fa-users me-2"></i>Quản lý tài khoản</a>
-            <a class="nav-link" href="/admin/product/product_list.html"><i class="fas fa-box me-2"></i>Quản lý sản phẩm</a>
-            <a class="nav-link" href="/admin/order/order_list.html"><i class="fas fa-shopping-bag me-2"></i>Quản lý đơn hàng</a>
-            <hr class="bg-light mx-3">
-            <a class="nav-link" href="/"><i class="fas fa-sign-out-alt me-2"></i>Thoát</a>
-        </nav>
+<div class="sidebar">
+    <div class="text-center mb-4">
+        <h4 class="shopee-color fw-bold"><i class="fab fa-shopee me-2"></i>Admin</h4>
     </div>
+    <nav class="nav flex-column">
+        <a class="nav-link active" href="/admin/home"><i class="fas fa-tachometer-alt me-2"></i>Tổng quan</a>
+        <a class="nav-link" href="/admin/account"><i class="fas fa-users me-2"></i>Quản lý tài khoản</a>
+        <a class="nav-link" href="/admin/product"><i class="fas fa-box me-2"></i>Quản lý sản phẩm</a>
+        <a class="nav-link" href="/admin/order"><i class="fas fa-shopping-bag me-2"></i>Quản lý đơn hàng</a>
+        <a class="nav-link" href="/admin/transaction"><i class="fas fa-shopping-bag me-2"></i>Quản lý giao dịch</a>
+        <a class="nav-link" href="/admin/category"><i class="fas fa-shopping-bag me-2"></i>Quản lý danh mục</a>
+        <hr class="bg-light mx-3">
+        <a class="nav-link" href="/"><i class="fas fa-sign-out-alt me-2"></i>Thoát</a>
+    </nav>
+</div>
 
-    <div class="main-content">
-        <header class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
-            <h4 class="mb-0">Tổng quan hệ thống</h4>
-            <div class="dropdown">
-                <button class="btn btn-white border dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                    <i class="far fa-user-circle me-2"></i>Administrator
-                </button>
-            </div>
-        </header>
+<div class="main-content">
+    <header class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+        <h4 class="mb-0">Tổng quan hệ thống</h4>
+        <div class="dropdown">
+            <button class="btn btn-white border dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                <i class="far fa-user-circle me-2"></i>Administrator
+            </button>
+        </div>
+    </header>
 
-        <div class="row g-4 mb-4">
-            <div class="col-md-3">
-                <div class="card stat-card bg-primary text-white p-3">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <div class="fs-4 fw-bold">1,250</div>
-                            <div style="font-size: 0.9rem;">Tổng khách hàng</div>
-                        </div>
-                        <i class="fas fa-users fa-2x opacity-50"></i>
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card stat-card bg-primary text-white p-3">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="fs-4 fw-bold" th:text="${stats.totalCustomers}"></div>
+                        <div style="font-size: 0.9rem;">Tổng khách hàng</div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card stat-card bg-success text-white p-3">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <div class="fs-4 fw-bold">8,420</div>
-                            <div style="font-size: 0.9rem;">Tổng sản phẩm</div>
-                        </div>
-                        <i class="fas fa-box fa-2x opacity-50"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card stat-card bg-warning text-dark p-3">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <div class="fs-4 fw-bold">352</div>
-                            <div style="font-size: 0.9rem;">Đơn hàng mới</div>
-                        </div>
-                        <i class="fas fa-shopping-cart fa-2x opacity-50"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card stat-card bg-danger text-white p-3">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <div class="fs-4 fw-bold">₫1.2B</div>
-                            <div style="font-size: 0.9rem;">Doanh thu tháng</div>
-                        </div>
-                        <i class="fas fa-dollar-sign fa-2x opacity-50"></i>
-                    </div>
+                    <i class="fas fa-users fa-2x opacity-50"></i>
                 </div>
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-md-8">
-                <div class="card border-none shadow-sm p-4">
-                    <h5 class="mb-4">Đơn hàng gần đây</h5>
-                    <div class="table-responsive">
-                        <table class="table align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Mã đơn</th>
-                                    <th>Khách hàng</th>
-                                    <th>Ngày đặt</th>
-                                    <th>Tổng tiền</th>
-                                    <th>Trạng thái</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>#ORD-001</td>
-                                    <td>Nguyễn Văn A</td>
-                                    <td>2026-02-26</td>
-                                    <td>₫450.000</td>
-                                    <td><span class="badge bg-warning text-dark">Chờ duyệt</span></td>
-                                </tr>
-                                <tr>
-                                    <td>#ORD-002</td>
-                                    <td>Trần Thị B</td>
-                                    <td>2026-02-25</td>
-                                    <td>₫1.200.000</td>
-                                    <td><span class="badge bg-success">Đã giao</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
+        <div class="col-md-3">
+            <div class="card stat-card bg-success text-white p-3">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="fs-4 fw-bold" th:text="${stats.totalCustomers}"></div>
+                        <div style="font-size: 0.9rem;">Tổng sản phẩm</div>
                     </div>
+                    <i class="fas fa-box fa-2x opacity-50"></i>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card border-none shadow-sm p-4">
-                    <h5 class="mb-4">Người dùng mới</h5>
-                    <ul class="list-unstyled">
-                        <li class="d-flex align-items-center mb-3">
-                            <img src="https://via.placeholder.com/40" class="rounded-circle me-3">
-                            <div>
-                                <div class="fw-bold" style="font-size: 0.9rem;">Lê Văn C</div>
-                                <div class="text-secondary" style="font-size: 0.8rem;">levanc@gmail.com</div>
-                            </div>
-                        </li>
-                        <li class="d-flex align-items-center mb-3">
-                            <img src="https://via.placeholder.com/40" class="rounded-circle me-3">
-                            <div>
-                                <div class="fw-bold" style="font-size: 0.9rem;">Phạm Thị D</div>
-                                <div class="text-secondary" style="font-size: 0.8rem;">phamthid@gmail.com</div>
-                            </div>
-                        </li>
-                    </ul>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card bg-warning text-dark p-3">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="fs-4 fw-bold" th:text="${stats.totalOrders}"></div>
+                        <div style="font-size: 0.9rem;">Tổng đơn hàng</div>
+                    </div>
+                    <i class="fas fa-shopping-cart fa-2x opacity-50"></i>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card border-none shadow-sm p-4">
+                <h5 class="mb-4">Đơn hàng gần đây</h5>
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Mã đơn</th>
+                            <th>Khách hàng</th>
+                            <th>Ngày đặt</th>
+                            <th>Tổng tiền</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                        </thead>
+                        <tr th:each="o : ${stats.recentOrders}">
+                            <td th:text="${o.orderCode}"></td>
+                            <td th:text="${o.customerOrder.username}"></td>
+                            <td th:text="${o.createdAt}"></td>
+                            <td th:text="${o.total}"></td>
+                            <td><span class="badge bg-success" th:text="${o.orderStatus}"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

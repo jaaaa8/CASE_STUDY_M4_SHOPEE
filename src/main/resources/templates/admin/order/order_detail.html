@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/layout :: admin-head('Chi tiết đơn hàng')}"></head>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+<body>
+
+<div th:replace="~{admin/fragments/layout :: admin-sidebar}"></div>
+
+<div class="main-content">
+<div class="container mt-4">
+
+  <h3>Chi tiết đơn hàng</h3>
+
+  <div class="card p-3">
+
+    <p><b>Mã đặt hàng:</b> <span th:text="${order.orderCode}"></span></p>
+
+    <p><b>Khách hàng:</b> <span th:text="${order.customerName}"></span></p>
+
+    <p><b>Trạng thái:</b> <span th:text="${order.orderStatus}"></span></p>
+
+    <p><b>Tổng:</b> <span th:text="${order.total}"></span></p>
+
+  </div>
+
+  <h4 class="mt-4">Sản phẩm</h4>
+
+  <table class="table table-bordered">
+
+    <thead>
+    <tr>
+      <th>Sản phẩm</th>
+      <th>Số lượng</th>
+      <th>Giá</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    <tr th:each="item : ${order.items}">
+
+      <td th:text="${item.productName}"></td>
+
+      <td th:text="${item.quantity}"></td>
+
+      <td th:text="${item.price}"></td>
+
+    </tr>
+
+    </tbody>
+
+  </table>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
