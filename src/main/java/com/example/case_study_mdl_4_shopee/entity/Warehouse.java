@@ -21,7 +21,10 @@ public class Warehouse {
     private Long warehouseId;
     private String name;
     private String address;
-    private String location;
+
+    @ManyToOne
+    @JoinColumn(name = "locationId")
+    private Location location;
 
     @OneToMany(mappedBy = "warehouse")
     private Set<WarehouseStaff> staff = new HashSet<>();

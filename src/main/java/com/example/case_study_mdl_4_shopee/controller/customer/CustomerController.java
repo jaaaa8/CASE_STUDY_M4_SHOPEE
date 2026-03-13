@@ -166,7 +166,7 @@ public class CustomerController {
         return "redirect:/product/detail/" + productId;
     }
 
-    @GetMapping("/profile")
+    @GetMapping("/customer/profile")
     public String profile(Model model) {
         Account currentAccount = userService.getCurrentAccount();
         model.addAttribute("orders", orderService.viewOrderHistory(currentAccount.getAccountId()));

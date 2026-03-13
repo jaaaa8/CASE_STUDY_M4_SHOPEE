@@ -4,8 +4,11 @@ import com.example.case_study_mdl_4_shopee.dto.OrderTrackingDto;
 import com.example.case_study_mdl_4_shopee.dto.ShipmentTrackingDto;
 import com.example.case_study_mdl_4_shopee.dto.SubOrderTrackingDto;
 import com.example.case_study_mdl_4_shopee.entity.ShipmentTracking;
+import com.example.case_study_mdl_4_shopee.entity.SubOrders;
+import com.example.case_study_mdl_4_shopee.enums.TrackingStatus;
 import com.example.case_study_mdl_4_shopee.repository.IOrdersRepository;
 import com.example.case_study_mdl_4_shopee.repository.IShipmentTrackingRepository;
+import com.example.case_study_mdl_4_shopee.service.impl.ITrackingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +17,20 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class TrackingService {
+public class TrackingService implements ITrackingService {
 
     private final IShipmentTrackingRepository shipmentTrackingRepository;
     private final IOrdersRepository ordersRepository;
 
+    @Override
+    public List<ShipmentTrackingDto> getTrackingBySubOrder(Long subOrderId) {
+        return List.of();
+    }
+
     /**
      * Lấy toàn bộ tracking của order theo customerId
      */
+    @Override
     public OrderTrackingDto getTrackingByOrder(Long customerId, Long orderId) {
 
         // kiểm tra order có thuộc customer không
@@ -75,6 +84,7 @@ public class TrackingService {
     /**
      * Convert Entity -> DTO
      */
+
     private ShipmentTrackingDto convertToDto(ShipmentTracking tracking) {
 
         ShipmentTrackingDto dto = new ShipmentTrackingDto();
@@ -99,4 +109,5 @@ public class TrackingService {
 
         return dto;
     }
+
 }

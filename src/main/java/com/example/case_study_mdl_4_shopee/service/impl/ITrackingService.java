@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface ITrackingService {
     List<ShipmentTrackingDto> getTrackingBySubOrder(Long subOrderId);
-    OrderTrackingDto getTrackingByOrder(Long orderId);
     OrderTrackingDto getTrackingByOrder(Long customerId, Long orderId);
 }

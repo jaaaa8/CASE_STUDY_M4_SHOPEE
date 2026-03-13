@@ -66,11 +66,9 @@ public class AuthApiController {
     }
 
     @PostMapping("/register")
-    public String register(Account account,
-                           @RequestParam Long cityId) {
+    public String register(Account account, @RequestParam Long cityId) {
 
-        City city = cityRepository.findById(cityId)
-                .orElseThrow(() -> new RuntimeException("City not found"));
+        City city = cityRepository.findById(cityId).orElseThrow(() -> new RuntimeException("City not found"));
 
         account.setCity(city);
 

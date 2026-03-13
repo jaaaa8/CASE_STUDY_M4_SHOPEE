@@ -2,6 +2,8 @@ package com.example.case_study_mdl_4_shopee.repository;
 
 import com.example.case_study_mdl_4_shopee.dto.AccountForAdminDto;
 import com.example.case_study_mdl_4_shopee.entity.Account;
+import com.example.case_study_mdl_4_shopee.entity.City;
+import com.example.case_study_mdl_4_shopee.entity.Location;
 import com.example.case_study_mdl_4_shopee.entity.Warehouse;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,5 +34,27 @@ public interface IAccountRepository extends JpaRepository<Account, Long> {
             @Param("phone") String phone
     );
 
+    @Query("""
+    SELECT a
+    FROM Account a
+    JOIN a.warehouseStaff ws
+    WHERE ws.warehouse.warehouseId = :warehouseId
+    """)
     List<Account> findShipperByWarehouse(Long warehouseId);
+
+    @Query("""
+    SELECT a
+    FROM Account a
+    JOIN a.accountRoles ar
+    JOIN ar.role r
+    JOIN a.warehouseStaff ws
+    JOIN ws.warehouse w
+    WHERE r.roleName = 'ROLE_SHIPPER'
+    AND ar.active = true
+    AND ws.isActive = true
+    AND ws.position = com.example.case_study_mdl_4_shopee.enums.StaffPosition.SHIPPER
+    AND w.location = :location
+    """)
+    Optional<Account> findShipperByLocation(@Param("location") Location location);
+
 }

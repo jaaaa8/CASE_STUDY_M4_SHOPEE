@@ -190,7 +190,7 @@ public class DataInitializer {
                         Warehouse w = new Warehouse();
                         w.setName("Da Nang Warehouse");
                         w.setAddress("Da Nang");
-                        w.setLocation("Mid");
+                        w.setLocation(mid);
                         return warehouseRepository.save(w);
                     });
 

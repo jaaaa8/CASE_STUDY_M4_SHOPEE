@@ -1,6 +1,7 @@
 package com.example.case_study_mdl_4_shopee.repository;
 
 import com.example.case_study_mdl_4_shopee.entity.ShipmentTracking;
+import com.example.case_study_mdl_4_shopee.entity.SubOrders;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,4 +20,6 @@ public interface IShipmentTrackingRepository extends JpaRepository<ShipmentTrack
         ORDER BY so.subOrderId, st.createdAt
         """)
     List<ShipmentTracking> findTrackingByOrderId(Long orderId);
+
+    ShipmentTracking findShipmentTrackingBySubOrder(SubOrders subOrder);
 }

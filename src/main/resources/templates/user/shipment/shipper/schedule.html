@@ -1,55 +1,133 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Shipper Schedule</title>
+    <title>Shopee Express - Shipper</title>
 
     <style>
 
         body{
-            font-family: Arial, sans-serif;
-            background:#f5f5f5;
             margin:0;
-            padding:20px;
+            font-family: Arial, sans-serif;
+            background:#f6f6f6;
         }
 
-        h1{
-            text-align:center;
-        }
+        /* NAVBAR */
 
-        #taskList{
-            max-width:800px;
-            margin:auto;
-        }
-
-        .task{
-            padding:15px;
-            margin:10px 0;
-            border-radius:8px;
+        .navbar{
+            height:60px;
+            background:#ee4d2d;
             color:white;
             display:flex;
-            justify-content:space-between;
             align-items:center;
+            justify-content:space-between;
+            padding:0 20px;
         }
 
-        /* pickup task */
-
-        .pickup{
-            background:#2ecc71;
+        .logo{
+            font-size:20px;
+            font-weight:bold;
         }
 
-        /* delivery task */
-
-        .delivery{
-            background:#f39c12;
+        .nav-right{
+            display:flex;
+            align-items:center;
+            gap:15px;
         }
 
-        button{
+        .nav-right button{
+            background:white;
             border:none;
-            padding:8px 12px;
+            padding:6px 12px;
             border-radius:5px;
             cursor:pointer;
+        }
+
+        /* LAYOUT */
+
+        .container{
+            display:flex;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar{
+            width:220px;
+            background:white;
+            height:calc(100vh - 60px);
+            border-right:1px solid #ddd;
+            padding-top:20px;
+        }
+
+        .menu-item{
+            padding:12px 20px;
+            cursor:pointer;
+        }
+
+        .menu-item:hover{
+            background:#f2f2f2;
+        }
+
+        /* CONTENT */
+
+        .content{
+            flex:1;
+            padding:25px;
+        }
+
+        .page-title{
+            font-size:22px;
+            margin-bottom:20px;
+        }
+
+        /* TASK CARD */
+
+        .task-card{
+            background:white;
+            border-radius:10px;
+            padding:20px;
+            margin-bottom:20px;
+            box-shadow:0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .task-header{
+            font-weight:bold;
+            margin-bottom:10px;
+        }
+
+        .warehouse{
+            color:#666;
+            margin-bottom:15px;
+        }
+
+        /* SUBORDER */
+
+        .suborder{
+            border:1px solid #eee;
+            border-radius:8px;
+            padding:10px;
+            margin-bottom:10px;
+            background:#fafafa;
+        }
+
+        .suborder strong{
+            color:#ee4d2d;
+        }
+
+        .view-btn{
+            margin-top:10px;
+            background:#ee4d2d;
+            color:white;
+            border:none;
+            padding:8px 14px;
+            border-radius:6px;
+            cursor:pointer;
+        }
+
+        .view-btn:hover{
+            background:#d84326;
         }
 
     </style>
@@ -58,52 +136,108 @@
 
 <body>
 
-<h1>Shipper Schedule</h1>
+<!-- NAVBAR -->
 
-<div id="taskList"></div>
+<div class="navbar">
 
-<script>
+    <div class="logo">
+        Shopee Express
+    </div>
 
-    const shipperId = 5; // demo
+    <div class="nav-right">
 
-    fetch(`/shipper/orders/tasks/${shipperId}`)
-        .then(res => res.json())
-        .then(tasks => {
+        Hello,
+        <span sec:authentication="name"></span>
 
-            const container = document.getElementById("taskList");
+        <form th:action="@{/profile}" method="get">
+            <button>Profile</button>
+        </form>
 
-            tasks.forEach(task => {
+        <form th:action="@{/logout}" method="post">
+            <button>Logout</button>
+        </form>
 
-                const div = document.createElement("div");
+    </div>
 
-                if(task.type === "PICKUP"){
-                    div.className = "task pickup";
-                }else{
-                    div.className = "task delivery";
-                }
+</div>
 
-                div.innerHTML = `
-            <div>
-                <strong>Task #${task.taskId}</strong><br>
-                Warehouse: ${task.warehouse?.name || "Unknown"}
+<!-- MAIN LAYOUT -->
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <div class="menu-item">Dashboard</div>
+
+        <div class="menu-item">
+            <a th:href="@{/shipper/tasks}">My Tasks</a>
+        </div>
+
+        <div class="menu-item">Tracking</div>
+
+        <div class="menu-item">History</div>
+
+    </div>
+
+    <!-- CONTENT -->
+
+    <div class="content">
+
+        <div class="page-title">
+            Shipper Schedule
+        </div>
+
+        <!-- TASK LIST -->
+
+        <div th:each="task : ${tasks}" class="task-card">
+
+            <div class="task-header">
+                Task #<span th:text="${task.taskId}"></span>
             </div>
-            <button onclick="viewTask(${task.taskId})">
-                View Orders
-            </button>
-        `;
 
-                container.appendChild(div);
-            });
+            <div class="warehouse">
+                Warehouse:
+                <span th:text="${task.warehouse.name}"></span>
+            </div>
 
-        });
+            <!-- SUBORDER -->
 
-    function viewTask(taskId){
+            <div th:each="sub : ${task.subOrders}" class="suborder">
 
-        window.location.href = `/task-detail.html?taskId=${taskId}`;
+                <div>
+                    <strong th:text="${sub.sellerOrder.username}"></strong>
+                </div>
 
-    }
+                <div>
+                    Phone:
+                    <span th:text="${sub.sellerOrder.phone}"></span>
+                </div>
 
-</script>
+                <div>
+                    Address:
+                    <span th:text="${sub.sellerOrder.address}"></span>
+                </div>
+
+                <div>
+                    SubOrder ID:
+                    <span th:text="${sub.subOrderId}"></span>
+                </div>
+
+            </div>
+
+            <a th:href="@{/shipper/task/detail/{id}(id=${task.taskId})}">
+                <button class="view-btn">
+                    View Task Detail
+                </button>
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
 
 </body>
 </html>

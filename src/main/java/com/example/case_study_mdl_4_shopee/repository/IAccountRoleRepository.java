@@ -1,5 +1,6 @@
 package com.example.case_study_mdl_4_shopee.repository;
 
+import com.example.case_study_mdl_4_shopee.entity.Account;
 import com.example.case_study_mdl_4_shopee.entity.AccountRole;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +19,12 @@ public interface IAccountRoleRepository extends JpaRepository<AccountRole,Long> 
     @Transactional
     @Query("UPDATE AccountRole ar SET ar.active = :status WHERE ar.account.accountId = :accId")
     void updateStatusByAccountId(@Param("accId") Long accId, @Param("status") boolean status);
+
+    @Query("""
+    SELECT ar FROM AccountRole ar
+    WHERE ar.account = :account
+    AND ar.role.roleName = 'SHIPPER'
+    AND ar.active = true
+    """)
+    Optional<AccountRole> findActiveShipperRole(Account account);
 }

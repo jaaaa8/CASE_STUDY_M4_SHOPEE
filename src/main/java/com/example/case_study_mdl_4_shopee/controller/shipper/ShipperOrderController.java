@@ -1,43 +1,49 @@
 package com.example.case_study_mdl_4_shopee.controller.shipper;
 
-
 import com.example.case_study_mdl_4_shopee.entity.ShippingTask;
 import com.example.case_study_mdl_4_shopee.entity.SubOrders;
 import com.example.case_study_mdl_4_shopee.service.ShipperOrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+@Controller
 @RequestMapping("/shipper/orders")
 @RequiredArgsConstructor
 public class ShipperOrderController {
 
     private final ShipperOrderService shipperOrderService;
 
-
     /* =========================
-       1. Lấy toàn bộ task của shipper
+       1. View shipper tasks
     ========================= */
 
     @GetMapping("/tasks/{shipperId}")
-    public List<ShippingTask> getShipperTasks(@PathVariable Long shipperId) {
+    public String getShipperTasks(@PathVariable Long shipperId, Model model) {
 
-        return shipperOrderService.getShipperTasks(shipperId);
+        List<ShippingTask> tasks = shipperOrderService.getShipperTasks(shipperId);
+
+        model.addAttribute("tasks", tasks);
+
+        return "user/shipment/shipper/schedule";
     }
 
-
     /* =========================
-       2. Xem chi tiết task
+       2. Task detail
     ========================= */
 
     @GetMapping("/tasks/detail/{taskId}")
-    public List<SubOrders> getTaskDetail(@PathVariable Long taskId) {
+    public String getTaskDetail(@PathVariable Long taskId, Model model) {
 
-        return shipperOrderService.getTaskDetail(taskId);
+        List<SubOrders> subOrders = shipperOrderService.getTaskDetail(taskId);
+
+        model.addAttribute("subOrders", subOrders);
+
+        return "user/shipment/shipper/task-detail";
     }
-
 
     /* =========================
        3. Confirm pickup
@@ -49,9 +55,8 @@ public class ShipperOrderController {
 
         shipperOrderService.confirmPickup(shipperId, subOrderId);
 
-        return "Pickup confirmed";
+        return "redirect:/shipper/home";
     }
-
 
     /* =========================
        4. Confirm delivered
@@ -63,6 +68,6 @@ public class ShipperOrderController {
 
         shipperOrderService.confirmDelivered(shipperId, subOrderId);
 
-        return "Order delivered successfully";
+        return "redirect:/shipper/home";
     }
 }

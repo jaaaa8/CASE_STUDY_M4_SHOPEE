@@ -1,6 +1,9 @@
 package com.example.case_study_mdl_4_shopee.service.impl;
 
+import com.example.case_study_mdl_4_shopee.entity.Account;
 import com.example.case_study_mdl_4_shopee.entity.SubOrders;
+
+import java.util.List;
 
 public interface ISellerOrderService {
     void confirmOrder(Long orderId);
@@ -12,5 +15,5 @@ public interface ISellerOrderService {
     void shipOrder(Long orderId);
     // đánh dấu đơn hàng đã được giao, chuyển trạng thái từ "CONFIRMED" sang "SHIPPED"
 
-    void assignWarehouse(SubOrders subOrder);
+    List<SubOrders> findAll(Account seller);
 }

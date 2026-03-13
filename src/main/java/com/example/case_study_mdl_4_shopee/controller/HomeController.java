@@ -32,6 +32,9 @@ public class HomeController {
 
             case "ROLE_SHIPPER":
                 return "redirect:/shipment/home";
+
+            case "ROLE_SELLER":
+                return "redirect:/seller/home";
         }
 
         return "redirect:/";

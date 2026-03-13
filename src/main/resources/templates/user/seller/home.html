@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,8 +28,15 @@
                 <i class="far fa-bell me-4 fs-5 cursor-pointer"></i>
                 <div class="d-flex align-items-center">
                     <img src="https://via.placeholder.com/30" class="rounded-circle me-2">
-                    <span style="font-size: 0.9rem;">shop_cua_toi</span>
+                    <span style="font-size: 0.9rem;" sec:authentication="name">shop_cua_toi</span>
                 </div>
+                <form th:action="@{/profile}" method="get">
+                    <button>Profile</button>
+                </form>
+
+                <form th:action="@{/logout}" method="post">
+                    <button>Logout</button>
+                </form>
             </div>
         </div>
     </nav>
@@ -97,19 +104,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="i : ${#numbers.sequence(1, 3)}">
+                                    <tr th:each="subOrder : ${subOrders}">
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <img src="https://via.placeholder.com/40" class="border me-2">
-                                                <span class="text-truncate" style="max-width: 200px;">Sản phẩm của Shop số [[${i}]]</span>
+                                                <span class="text-truncate" style="max-width: 200px;" th:text="'Mã đơn: '+ ${subOrder.subOrderId}"></span>
                                             </div>
                                         </td>
-                                        <td>₫[[${i * 120000}]]</td>
-                                        <td><span class="badge bg-info text-dark">Chờ lấy hàng</span></td>
+                                        <td th:text="'Giá: '+${subOrder.total}"></td>
+                                        <td><span class="badge bg-info text-dark" th:text="${subOrder.status}"></span></td>
                                         <td>Nhanh</td>
                                         <td>
                                             <a href="/seller/product/update" class="btn btn-outline-primary btn-sm">Chỉnh sửa</a>
                                             <button class="btn btn-link btn-sm text-decoration-none text-dark">Chi tiết</button>
+                                            <div th:if="${subOrder.status.name() == 'PENDING'}" class="d-inline-block">
+                                                <a th:href="@{/seller/orders/confirm/{id}(id=${subOrder.subOrderId})}">
+                                                    <button>Confirm</button>
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
