@@ -23,8 +23,11 @@ public interface IOrdersRepository extends JpaRepository<Orders, Long> {
         ORDER BY o.createdAt DESC
     """)
     List<Orders> findAllOrders();
+    // Sửa lại Query trong IOrdersRepository.java
     @Query("""
     SELECT o FROM Orders o
+    LEFT JOIN FETCH o.seller
+    LEFT JOIN FETCH o.customerOrder
     WHERE (:orderCode IS NULL OR o.orderCode LIKE %:orderCode%)
     AND (:customer IS NULL OR o.customerOrder.username LIKE %:customer%)
     AND (:status IS NULL OR o.orderStatus = :status)

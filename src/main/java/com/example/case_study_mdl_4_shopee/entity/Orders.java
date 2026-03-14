@@ -33,7 +33,15 @@ public class Orders {
     @CreationTimestamp
     @Column(name = "createdAt", updatable = false)
     private LocalDateTime createdAt;
-
+    @ManyToOne
+    @JoinColumn(name = "sellerId")
+    private Account seller;
+    @ManyToOne
+    @JoinColumn(name = "discountId")
+    private Discount discount;
+    @Column(nullable = false)
+    @Builder.Default
+    private Long discountAmount = 0L; // Lưu số tiền đã giảm
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default

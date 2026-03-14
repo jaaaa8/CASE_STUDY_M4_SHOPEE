@@ -7,6 +7,7 @@ import com.example.case_study_mdl_4_shopee.enums.TrackingStatus;
 import com.example.case_study_mdl_4_shopee.enums.TransactionType;
 import com.example.case_study_mdl_4_shopee.repository.*;
 import com.example.case_study_mdl_4_shopee.service.impl.ICustomerOrderService;
+import com.example.case_study_mdl_4_shopee.service.impl.IDiscountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,13 +23,15 @@ public class CustomerOrderService implements ICustomerOrderService {
     private final ISubOrdersRepository subOrdersRepository;
     private final ITransactionHistoryRepository transactionRepository;
     private final IShipmentTrackingRepository shipmentTrackingRepository;
+    private final IDiscountService discountService;
+    private final IDiscountRepository discountRepository;
 
     private final IProductRepository productRepository;
     private final IOrderItemsRepository orderItemsRepository;
 
     @Override
     @Transactional
-    public Orders checkout(Long customerId, String paymentMethod, Long productId, Integer quantity) {
+    public Orders checkout(Long customerId, String paymentMethod, Long productId, Integer quantity, String discountCode) {
         Orders order;
         if (productId != null && quantity != null) {
             // Trường hợp mua ngay: tạo đơn hàng mới không liên quan đến giỏ hàng
@@ -102,6 +105,30 @@ public class CustomerOrderService implements ICustomerOrderService {
                 subOrdersRepository.save(subOrder);
             }
         }
+        // 2. Xử lý Discount
+        long discountAmount = 0L;
+        if (discountCode != null && !discountCode.isEmpty()) {
+            // Kiểm tra và tính toán giá trị giảm giá
+            Discount discount = discountService.validateAndCalculate(discountCode, order.getTotal());
+            discountAmount = discountService.calculateDiscountAmount(discount, order.getTotal()).longValue();
+
+            // Cập nhật thông tin vào Order
+            order.setDiscount(discount);
+            // Giả sử bạn thêm trường discountAmount và subTotal vào Entity Orders
+            // order.setDiscountAmount(discountAmount);
+
+            // Cập nhật lượt sử dụng cho Voucher (Race condition protection)
+            int rowsAffected = discountRepository.incrementUsedCount(discount.getDiscountId());
+            if (rowsAffected == 0) {
+                throw new RuntimeException("Mã giảm giá vừa hết lượt sử dụng");
+            }
+        }
+
+        // 3. Tính toán lại số tiền cuối cùng phải trả
+        long finalTotal = order.getTotal() - discountAmount;
+        if (finalTotal < 0) finalTotal = 0L;
+        order.setTotal(finalTotal); // Cập nhật lại total sau giảm giá
+        ordersRepository.save(order);
 
         Account customer = order.getCustomerOrder();
         

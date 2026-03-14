@@ -7,14 +7,21 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --shopee-orange: #ee4d2d; }
-        body { background-color: var(--shopee-orange); }
+        :root {
+            --shopee-orange: #ee4d2d;
+        }
+
+        body {
+            background-color: var(--shopee-orange);
+        }
+
         .login-container {
             background-color: white;
             border-radius: 4px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
             padding: 30px;
         }
+
         .btn-shopee {
             background-color: var(--shopee-orange);
             color: white;
@@ -25,7 +32,12 @@
             text-transform: uppercase;
             font-weight: bold;
         }
-        .btn-shopee:hover { color: white; opacity: 0.9; }
+
+        .btn-shopee:hover {
+            color: white;
+            opacity: 0.9;
+        }
+
         .shopee-header {
             background-color: white;
             padding: 20px 0;
@@ -33,73 +45,79 @@
     </style>
 </head>
 <body>
-    <header class="shopee-header mb-5">
-        <div class="container d-flex align-items-center justify-content-between">
-            <div class="d-flex align-items-center">
-                <a href="/" class="text-decoration-none d-flex align-items-center" style="color: var(--shopee-orange);">
-                    <i class="fab fa-shopee me-2" style="font-size: 3rem;"></i>
-                    <span class="fs-2 fw-bold">Shopee</span>
-                </a>
-                <span class="ms-4 fs-4 pt-2">Đăng Nhập</span>
-            </div>
-            <a href="#" class="text-decoration-none" style="color: var(--shopee-orange);">Bạn cần giúp đỡ?</a>
+<header class="shopee-header mb-5">
+    <div class="container d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+            <a href="/" class="text-decoration-none d-flex align-items-center" style="color: var(--shopee-orange);">
+                <i class="fab fa-shopee me-2" style="font-size: 3rem;"></i>
+                <span class="fs-2 fw-bold">Shopee</span>
+            </a>
+            <span class="ms-4 fs-4 pt-2">Đăng Nhập</span>
         </div>
-    </header>
+        <a href="#" class="text-decoration-none" style="color: var(--shopee-orange);">Bạn cần giúp đỡ?</a>
+    </div>
+</header>
 
-    <div class="container">
-        <div class="row justify-content-end">
-            <div class="col-md-5 col-lg-4">
-                <div class="login-container">
-                    <h5 class="mb-4">Đăng Nhập</h5>
-                    <form th:action="@{/api/auth/login}" method="post">
-                        <div class="mb-3">
-                            <input type="text" name="username" class="form-control" placeholder="Email/Số điện thoại/Tên đăng nhập">
-                        </div>
+<div class="container">
+    <div class="row justify-content-end">
+        <div class="col-md-5 col-lg-4">
+            <div class="login-container">
+                <h5 class="mb-4">Đăng Nhập</h5>
+                <form th:action="@{/api/auth/login}" method="post">
+                    <div class="mb-3">
+                        <input type="text" name="username" class="form-control"
+                               placeholder="Email/Số điện thoại/Tên đăng nhập">
+                    </div>
 
-                        <div class="mb-3">
-                            <input type="password" name="password" class="form-control" placeholder="Mật khẩu">
-                        </div>
+                    <div class="mb-3">
+                        <input type="password" name="password" class="form-control" placeholder="Mật khẩu">
+                    </div>
 
-                        <button type="submit" class="btn btn-shopee mb-3">Đăng Nhập</button>
-                        
-                        <div class="d-flex justify-content-between mb-4" style="font-size: 0.8rem;">
-                            <a href="#" class="text-decoration-none text-primary">Quên mật khẩu</a>
-                            <a href="#" class="text-decoration-none text-primary">Đăng nhập với SMS</a>
-                        </div>
+                    <button type="submit" class="btn btn-shopee mb-3">Đăng Nhập</button>
 
-                        <div class="d-flex align-items-center mb-4">
-                            <hr class="flex-grow-1">
-                            <span class="px-2 text-secondary" style="font-size: 0.8rem;">HOẶC</span>
-                            <hr class="flex-grow-1">
-                        </div>
+                    <div class="d-flex justify-content-between mb-4" style="font-size: 0.8rem;">
+                        <a href="#" class="text-decoration-none text-primary">Quên mật khẩu</a>
+                        <a href="#" class="text-decoration-none text-primary">Đăng nhập với SMS</a>
+                    </div>
+                    <div th:if="${param.error}" class="alert alert-danger">
+                         <span th:if="${session != null and session['SPRING_SECURITY_LAST_EXCEPTION'] != null and session['SPRING_SECURITY_LAST_EXCEPTION'].message.contains('User is disabled')}">Tài khoản của bạn đã bị khóa bởi Admin!</span>
+                        <span th:unless="${session['SPRING_SECURITY_LAST_EXCEPTION'] != null and session['SPRING_SECURITY_LAST_EXCEPTION'].message.contains('User is disabled')}">Sai tên đăng nhập hoặc mật khẩu!</span>
+                    </div>
 
-                        <div class="row g-2 mb-4">
-                            <div class="col-6">
-                                <button type="button" class="btn btn-outline-secondary w-100" style="font-size: 0.85rem;">
-                                    <i class="fab fa-facebook me-2 text-primary"></i> Facebook
-                                </button>
-                            </div>
-                            <div class="col-6">
-                                <button type="button" class="btn btn-outline-secondary w-100" style="font-size: 0.85rem;">
-                                    <i class="fab fa-google me-2 text-danger"></i> Google
-                                </button>
-                            </div>
-                        </div>
+                    <div class="d-flex align-items-center mb-4">
+                        <hr class="flex-grow-1">
+                        <span class="px-2 text-secondary" style="font-size: 0.8rem;">HOẶC</span>
+                        <hr class="flex-grow-1">
+                    </div>
 
-                        <div class="text-center" style="font-size: 0.9rem;">
-                            <span class="text-secondary">Bạn mới biết đến Shopee?</span>
-                            <a href="/register" class="text-decoration-none" style="color: var(--shopee-orange);">Đăng ký</a>
+                    <div class="row g-2 mb-4">
+                        <div class="col-6">
+                            <button type="button" class="btn btn-outline-secondary w-100" style="font-size: 0.85rem;">
+                                <i class="fab fa-facebook me-2 text-primary"></i> Facebook
+                            </button>
                         </div>
-                    </form>
-                </div>
+                        <div class="col-6">
+                            <button type="button" class="btn btn-outline-secondary w-100" style="font-size: 0.85rem;">
+                                <i class="fab fa-google me-2 text-danger"></i> Google
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="text-center" style="font-size: 0.9rem;">
+                        <span class="text-secondary">Bạn mới biết đến Shopee?</span>
+                        <a href="/register" class="text-decoration-none" style="color: var(--shopee-orange);">Đăng
+                            ký</a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
-    <footer class="mt-5 pt-5 pb-3 text-white text-center" style="font-size: 0.8rem; opacity: 0.8;">
-        <div class="container">
-            <p>© 2026 Shopee. Tất cả các quyền được bảo lưu.</p>
-        </div>
-    </footer>
+<footer class="mt-5 pt-5 pb-3 text-white text-center" style="font-size: 0.8rem; opacity: 0.8;">
+    <div class="container">
+        <p>© 2026 Shopee. Tất cả các quyền được bảo lưu.</p>
+    </div>
+</footer>
 </body>
 </html>

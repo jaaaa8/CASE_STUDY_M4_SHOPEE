@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -19,6 +20,7 @@ public class CustomerController {
     private final ICustomerOrderService orderService;
     private final IReviewService reviewService;
     private final IUserManagementService userService;
+    private final IDiscountService discountService;
 
     @GetMapping("/")
     public String home(Model model) {
@@ -90,35 +92,39 @@ public class CustomerController {
     public String payment(@RequestParam(required = false) Long productId, @RequestParam(required = false) Integer quantity, Model model) {
         Account currentAccount = userService.getCurrentAccount();
         Long customerId = currentAccount.getAccountId();
+        Orders cart = null;
         if (productId != null && quantity != null) {
             Product product = productService.getProductById(productId);
             Account customer = currentAccount;
-            
+
             // Giả lập một đối tượng Orders cho trang payment.html
             OrderItems item = OrderItems.builder()
                     .product(product)
                     .quantity(quantity)
                     .price((long) product.getPrice().intValue())
                     .build();
-            
+
             SubOrders subOrder = SubOrders.builder()
                     .sellerOrder(product.getSeller())
                     .total((long) product.getPrice() * quantity)
                     .build();
-            subOrder.setOrderItems(new java.util.ArrayList<>(List.of(item)));
-            
+            subOrder.setOrderItems(new ArrayList<>(List.of(item)));
+
             Orders tempOrder = Orders.builder()
                     .customerOrder(customer)
                     .total((long) (product.getPrice().intValue() * quantity))
                     .build();
-            tempOrder.setSubOrders(new java.util.ArrayList<>(List.of(subOrder)));
+            tempOrder.setSubOrders(new ArrayList<>(List.of(subOrder)));
             subOrder.setOrder(tempOrder);
-            
+
             model.addAttribute("cart", tempOrder);
             model.addAttribute("productId", productId);
             model.addAttribute("quantity", quantity);
         } else {
             model.addAttribute("cart", cartService.getCart(customerId));
+        }
+        if (cart != null && cart.getDiscountAmount() == null) {
+            cart.setDiscountAmount(0L);
         }
         return "user/customer/payment/payment";
     }
@@ -127,11 +133,13 @@ public class CustomerController {
     public String checkout(@RequestParam String paymentMethod, 
                            @RequestParam(required = false) Long productId, 
                            @RequestParam(required = false) Integer quantity,
+                           @RequestParam(required = false) String discountCode,
                            Model model) {
         Account currentAccount = userService.getCurrentAccount();
+
         try {
             Long customerId = currentAccount.getAccountId();
-            Orders order = orderService.checkout(customerId, paymentMethod, productId, quantity);
+            Orders order = orderService.checkout(customerId, paymentMethod, productId, quantity, discountCode);
             return "redirect:/success/success/" + order.getOrdersId();
         } catch (RuntimeException e) {
             model.addAttribute("error", e.getMessage());
