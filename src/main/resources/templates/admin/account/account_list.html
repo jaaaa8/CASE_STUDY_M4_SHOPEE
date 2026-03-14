@@ -111,21 +111,15 @@
                                         <i class="bi bi-eye-fill text-info"></i>
                                     </a>
 
-                                    <a th:if="${account.active}"
-                                       th:href="@{/admin/account/lock/{id}(id=${account.accountId})}"
-                                       class="btn btn-white btn-sm border"
-                                       onclick="return confirm('Bạn có chắc chắn muốn KHÓA tài khoản này không? Người dùng sẽ không thể đăng nhập.')"
-                                       title="Khóa tài khoản">
-                                        <i class="bi bi-lock-fill text-danger"></i>
-                                    </a>
-
-                                    <a th:unless="${account.active}"
-                                       th:href="@{/admin/account/unlock/{id}(id=${account.accountId})}"
-                                       class="btn btn-white btn-sm border"
-                                       onclick="return confirm('Mở khóa cho tài khoản này?')"
-                                       title="Mở khóa tài khoản">
-                                        <i class="bi bi-unlock-fill text-success"></i>
-                                    </a>
+                                    <button type="button"
+                                            class="btn btn-white btn-sm border"
+                                            th:data-id="${account.accountId}"
+                                            th:data-username="${account.username}"
+                                            th:data-active="${account.active}"
+                                            onclick="prepareStatusModal(this)"
+                                            th:title="${account.active ? 'Khóa tài khoản' : 'Mở khóa'}">
+                                        <i th:class="${account.active ? 'bi bi-lock-fill text-danger' : 'bi bi-unlock-fill text-success'}"></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -144,7 +138,57 @@
 
     </div>
 </div>
+<div class="modal fade" id="statusModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="statusForm" method="post">
+            <input type="hidden" name="action" id="statusAction">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header" id="statusModalHeader">
+                    <h5 class="modal-title text-white" id="statusModalTitle">Xác nhận</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="statusModalBody"></p>
+                    <p class="small text-muted" id="statusModalSubText"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn" id="statusConfirmBtn">Xác nhận</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
+<script>
+    function prepareStatusModal(button) {
+        const id = button.getAttribute('data-id');
+        const username = button.getAttribute('data-username');
+        const isActive = button.getAttribute('data-active') === 'true';
+
+        const form = document.getElementById('statusForm');
+        const actionInput = document.getElementById('statusAction');
+        const body = document.getElementById('statusModalBody');
+        const confirmBtn = document.getElementById('statusConfirmBtn');
+
+        form.action = '/admin/account/status/' + id;
+
+        if (isActive) {
+            actionInput.value = 'lock'; // Gửi action lock
+            body.innerHTML = `Bạn có chắc muốn KHÓA tài khoản <strong>${username}</strong>?`;
+            confirmBtn.className = 'btn btn-danger';
+            confirmBtn.innerText = 'Khóa tài khoản';
+        } else {
+            actionInput.value = 'unlock'; // Gửi action unlock
+            body.innerHTML = `Mở khóa cho tài khoản <strong>${username}</strong>?`;
+            confirmBtn.className = 'btn btn-success';
+            confirmBtn.innerText = 'Mở khóa';
+        }
+
+        const modal = new bootstrap.Modal(document.getElementById('statusModal'));
+        modal.show();
+    }
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

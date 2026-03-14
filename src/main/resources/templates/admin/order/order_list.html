@@ -60,6 +60,7 @@
             <th>Trạng thái</th>
             <th>Tổng</th>
             <th>Ngày đặt đơn</th>
+            <th>Tên shop</th>
             <th>Thao tác</th>
         </tr>
         </thead>
@@ -91,6 +92,7 @@
             <td th:text="${order.total}"></td>
 
             <td th:text="${#temporals.format(order.createdAt,'dd/MM/yyyy')}"></td>
+            <td th:text="${order.sellerName != null ? order.sellerName : 'Không có tên'}"></td>
 
             <td>
                 <a th:href="@{/admin/order/detail/{id}(id=${order.ordersId})}"
